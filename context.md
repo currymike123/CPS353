@@ -1,8 +1,8 @@
-References for all content in this course can be found:
+### References for all content in this course can be found:
 - Books/swe_at_google.pdf
 - Missing_Semester/missing.csail.mit.edu
 
-The course should follow this structure:
+### The course should follow this structure:
 
 1. Development Environment Setup
    - Setting up your development environment
@@ -50,7 +50,16 @@ The course should follow this structure:
     - Best practices for conducting code reviews
     - Collaborating effectively with team members
 
+
+### Term Project
+
 Throughout the course the students should be building small projects and then a large final project. I want to setup a basic project that the students will build on. They will create a simple Java app the runs a server with Spring Boot and exposes a REST API. The project will start out small but it should be able to scale to many users. We will cover RPC (Remote Procedure Call) / gRPC, this will be covered in the later sections of the course. The final project will be a more complex application that incorporates all the concepts learned throughout the course, including version control, testing, documentation, and CI/CD.
 
+### Lectures
 
+- Lectures should be formatted as marp markdown slides. 
+- They should be 60 minutes long. 
+- Follow the syllabus.md file 
+- Provide plenty of examples and code snippets to illustrate concepts.
+- Create versions to show the class and versions I will use to teach. The version I will use will have more detailed explanations and examples, while the version for the class will be more concise and focused on key points.
 

@@ -1,7 +1,7 @@
 # CPS 353: Software Construction
 
 ## Course Description
-This course introduces fundamental principles and techniques of software construction. Students will learn how to write software that is safe from bugs, easy to understand, and ready for change. The course will cover topics such as static checking, systematic testing, code review, specifications, mutability, abstract data types, interfaces, equality, and concurrency, with all concepts and examples grounded in the Java programming language.
+This course introduces fundamental principles and techniques of modern software construction. Students will learn how to build, test, and deploy robust, scalable applications. The course covers the entire development lifecycle, including environment setup, version control with Git, automated builds, testing methodologies, CI/CD, and collaborative practices. All concepts are grounded in the Java programming language, using industry-standard tools like Maven/Gradle, JUnit, and Spring Boot.
 
 ## Course Philosophy
 This course is guided by three core principles for building robust software:
@@ -11,83 +11,81 @@ This course is guided by three core principles for building robust software:
 
 ## Schedule
 
-### Week 1: Introduction & Version Control
+### Week 1: Course Intro & Dev Environment
 - **Lecture 0:** Course Introduction
-- **Lecture 1:** Introduction to Version Control & Basic Git
+- **Lecture 1:** Development Environment Setup (VS Code, VIM, Tools)
 
-### Week 2: Advanced Git & Static Checking
-- **Lecture 2:** Git Branching, Merging, and Collaboration
-- **Lecture 3:** Static Checking & Code Quality
+### Week 2: Version Control with Git
+- **Lecture 2:** Introduction to Git, Basic Commands
+- **Lecture 3:** Branching, Merging, and Collaboration (GitHub)
+
+### Week 3: Building & Packaging Java Apps
+- **Lecture 4:** Introduction to Build Tools (Maven/Gradle)
+- **Lecture 5:** Dependencies & Building JARs
+- **Term Project Part 1 Assigned (Initial Setup)**
+
+### Week 4: Testing Fundamentals
+- **Lecture 6:** Importance of Testing, Writing Unit Tests (JUnit)
+- **Lecture 7:** Test-Driven Development (TDD)
 - **Homework 1 Assigned**
 
-### Week 3: Testing & Specifications
-- **Lecture 4:** Systematic Testing & Unit Testing (JUnit)
-- **Lecture 5:** Writing Specifications
+### Week 5: Documentation & Code Review
+- **Lecture 8:** Writing Effective Documentation (Javadoc)
+- **Lecture 9:** Code Review Best Practices
 
-### Week 4: Abstract Data Types (ADTs)
-- **Lecture 7:** Introduction to ADTs
-- **Lecture 8:** Representation Independence
+### Week 6: Debugging & Profiling
+- **Lecture 10:** Debugging Techniques in an IDE
+- **Lecture 11:** Profiling for Performance Bottlenecks
+- **Term Project Part 1 Due, Part 2 Assigned (REST API)**
+
+### Week 7: Intro to CI/CD with GitHub Actions
+- **Lecture 12:** Continuous Integration Concepts
+- **Lecture 13:** Setting up a CI Pipeline
 - **Homework 2 Assigned**
-- **Project 1 Assigned**
-
-### Week 5: Mutability and Immutability
-- **Lecture 9:** Mutability & Aliasing
-- **Lecture 10:** Designing for Immutability
-
-### Week 6: Interfaces and Polymorphism
-- **Lecture 11:** Interfaces & Polymorphism
-- **Lecture 12:** Equality & Hashing
-- **Homework 3 Assigned**
-
-### Week 7: Generics
-- **Lecture 13:** Introduction to Generics
-- **Lecture 14:** Generics & Subtyping
 
 ### Week 8: Midterm Exam
-- **Lecture 15:** Midterm Review
+- **Lecture 14:** Midterm Review
 - **Midterm Exam**
-- **Project 1 Due**
 
-### Week 9: Concurrency
-- **Lecture 16:** Concurrency & Race Conditions
-- **Lecture 17:** Locks & Synchronization
+### Week 9: Advanced Testing
+- **Lecture 15:** Integration Testing
+- **Lecture 16:** End-to-End Testing Strategies
+- **Term Project Part 2 Due, Part 3 Assigned (CI/CD)**
+
+### Week 10: Advanced CI/CD & Deployment
+- **Lecture 17:** Automating Builds and Tests
+- **Lecture 18:** Deploying Applications to Production
 - **Homework 4 Assigned**
-- **Project 2 Assigned**
 
-### Week 10: Advanced Concurrency
-- **Lecture 18:** Thread Safety
-- **Lecture 19:** Concurrency Models in Java
+### Week 11: Introduction to RPC
+- **Lecture 19:** Remote Procedure Calls (RPC)
+- **Lecture 20:** Introduction to gRPC
 
-### Week 11: AI in Software Development
-- **Lecture 20:** Introduction to LLMs & Code Generation
-- **Lecture 21:** Prompt Engineering for Developers
+### Week 12: Code Collaboration & Project Work
+- **Lecture 21:** Advanced Git Workflows
+- **Lecture 22:** Project Work Session
 - **Homework 5 Assigned**
+- **Term Project Part 3 Due, Part 4 Assigned (gRPC)**
 
-### Week 12: Building AI-Powered Tools
-- **Lecture 22:** Interacting with LLM APIs in Java
-- **Lecture 23:** Building Custom Code Generation Tools
+### Week 13: Project Work
+- **Lecture 23:** Project Work Session & Instructor Feedback
+- **Lecture 24:** Advanced Topics & Project Q&A
 
-### Week 13: Agentic Coding
-- **Lecture 24:** Introduction to Agentic Systems
-- **Lecture 25:** Designing and Implementing Simple Agents
+### Week 14: Project Presentations & Review
+- **Lecture 25:** Final Project Presentations
+- **Lecture 26:** Course Review
 - **Homework 6 Assigned**
-
-### Week 14: Project Work & Review
-- **Lecture 26:** Advanced Agentic Systems
-- **Lecture 27:** Course Review & Project Work
-- **Project 2 Due**
+- **Final Project Due**
 
 ### Week 15: Final Exam
 - **Final Exam Review**
 - **Final Exam**
 
 ## Projects
-- **Project 1:** A smaller-scale project focusing on ADTs, immutability, and testing.
-- **Project 2:** A larger-scale project where students will build an AI-powered or agentic coding tool.
+- **Term Project:** Throughout the semester, students will build and evolve a single, scalable web service using Java and Spring Boot. The project will start with a basic setup and incrementally add features, tests, and infrastructure as new concepts are introduced in lectures. The project will be developed in parts, culminating in a final application that incorporates version control, testing, documentation, and CI/CD.
 
 ## Grading
 - Homework: 20%
-- Project 1: 15%
-- Project 2: 25%
+- Term Project: 40%
 - Midterm Exam: 15%
 - Final Exam: 25%
