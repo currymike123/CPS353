@@ -1,7 +1,7 @@
-# CPS 353: Software Construction
+# CPS 353: Software Engineering
 
 ## Course Description
-This course introduces fundamental principles and techniques of modern software construction. Students will learn how to build, test, and deploy robust, scalable applications. The course covers the entire development lifecycle, including environment setup, version control with Git, automated builds, testing methodologies, CI/CD, and collaborative practices. All concepts are grounded in the Java programming language, using industry-standard tools like Maven/Gradle, JUnit, and Spring Boot.
+This course introduces fundamental principles and techniques of modern software construction. Students will learn how to build, test, and deploy robust, scalable applications. The course covers the entire development lifecycle, including environment setup, version control with Git, automated builds, testing methodologies, CI/CD, and collaborative practices. All concepts are grounded in the Java programming language, using industry-standard tools like Gradle, and JUnit.
 
 ## Course Philosophy
 This course is guided by three core principles for building robust software:
@@ -11,70 +11,76 @@ This course is guided by three core principles for building robust software:
 
 ## Schedule
 
-### Week 1: Course Intro & Dev Environment
-- **Lecture 0:** Course Introduction
-- **Lecture 1:** Development Environment Setup (VS Code, VIM, Tools)
+### Weeks 1-2: Foundations: Dev Environment & Version Control
+- **Topics:**
+  - Course Introduction & Philosophy
+  - Development Environment Setup (IDE, VIM Motions, and essential tools)
+  - Introduction to Version Control with Git (basic commands, branching, merging)
+  - Collaborative workflows with GitHub (Pull Requests, Code Reviews)
 
-### Week 2: Version Control with Git
-- **Lecture 2:** Introduction to Git, Basic Commands
-- **Lecture 3:** Branching, Merging, and Collaboration (GitHub)
+### Weeks 3-4: Building & Testing
+- **Topics:**
+  - Introduction to Build Tools (Gradle)
+  - Managing Dependencies & Building JARs
+  - The Importance of Testing: Writing Unit Tests with JUnit
+  - Test-Driven Development (TDD) as a design practice
 
-### Week 3: Building & Packaging Java Apps
-- **Lecture 4:** Introduction to Build Tools (Maven/Gradle)
-- **Lecture 5:** Dependencies & Building JARs
-- **Term Project Part 1 Assigned (Initial Setup)**
+### Week 5: API Design & Project Kickoff
+- **Topics:**
+  - Designing clean and effective APIs
+  - Introduction to Design Patterns
+- **Project:**
+  - **Term Project Part 1 Assigned (Infrastructure & Design)**
 
-### Week 4: Testing Fundamentals
-- **Lecture 6:** Importance of Testing, Writing Unit Tests (JUnit)
-- **Lecture 7:** Test-Driven Development (TDD)
-- **Homework 1 Assigned**
+### Week 6: Code Quality & Debugging
+- **Topics:**
+  - Writing Effective Documentation (Javadoc)
+  - Code Review Best Practices
+  - Debugging Techniques in an IDE
 
-### Week 5: Documentation & Code Review
-- **Lecture 8:** Writing Effective Documentation (Javadoc)
-- **Lecture 9:** Code Review Best Practices
-
-### Week 6: Debugging & Profiling
-- **Lecture 10:** Debugging Techniques in an IDE
-- **Lecture 11:** Profiling for Performance Bottlenecks
-- **Term Project Part 1 Due, Part 2 Assigned (REST API)**
-
-### Week 7: Intro to CI/CD with GitHub Actions
-- **Lecture 12:** Continuous Integration Concepts
-- **Lecture 13:** Setting up a CI Pipeline
-- **Homework 2 Assigned**
+### Week 7: Exceptions & Generics
+- **Topics:**
+  - Handling errors gracefully with Exceptions
+  - Java Generics for type-safe code
 
 ### Week 8: Midterm Exam
-- **Lecture 14:** Midterm Review
-- **Midterm Exam**
+- **Midterm Review & Exam**
+- **Project:**
+  - **Term Project Part 1 Due, Part 2 Assigned (Implementation & Testing)**
 
-### Week 9: Advanced Testing
-- **Lecture 15:** Integration Testing
-- **Lecture 16:** End-to-End Testing Strategies
-- **Term Project Part 2 Due, Part 3 Assigned (CI/CD)**
+### Week 9: Concurrency
+- **Topics:**
+  - Introduction to Multithreading
+  - Applying concurrent programming patterns to the project
 
-### Week 10: Advanced CI/CD & Deployment
-- **Lecture 17:** Automating Builds and Tests
-- **Lecture 18:** Deploying Applications to Production
-- **Homework 4 Assigned**
+### Week 10: Networking & Remote Communication
+- **Topics:**
+  - Introduction to Networking, RPC (Remote Procedure Calls)
+  - High-performance communication with gRPC
 
-### Week 11: Introduction to RPC
-- **Lecture 19:** Remote Procedure Calls (RPC)
-- **Lecture 20:** Introduction to gRPC
+### Week 11: Performance Tuning
+- **Topics:**
+  - Profiling applications to identify performance bottlenecks
+  - Strategies for performance optimization
 
-### Week 12: Code Collaboration & Project Work
-- **Lecture 21:** Advanced Git Workflows
-- **Lecture 22:** Project Work Session
-- **Homework 5 Assigned**
-- **Term Project Part 3 Due, Part 4 Assigned (gRPC)**
+### Week 12: Advanced CI/CD & Project Work
+- **Topics:**
+  - Introduction to CI/CD with GitHub Actions
+- **Project:**
+  - **Term Project Part 2 Due, Part 3 Assigned (Concurrency & CI/CD)**
+  - Project Work Session
 
-### Week 13: Project Work
-- **Lecture 23:** Project Work Session & Instructor Feedback
-- **Lecture 24:** Advanced Topics & Project Q&A
+### Week 13: Project Work & Advanced Topics
+- **Project:**
+  - Project Work Session & Instructor Feedback
+  - Advanced Topics & Project Q&A 
+  - Agentic Coding: Leveraging AI tools for code generation and review
 
 ### Week 14: Project Presentations & Review
-- **Lecture 25:** Final Project Presentations
-- **Lecture 26:** Course Review
-- **Homework 6 Assigned**
+- **Project:**
+  - **Final Project Presentations**
+  - **Term Project Part 3 Due**
+  - Course Review
 - **Final Project Due**
 
 ### Week 15: Final Exam
@@ -82,10 +88,31 @@ This course is guided by three core principles for building robust software:
 - **Final Exam**
 
 ## Projects
-- **Term Project:** Throughout the semester, students will build and evolve a single, scalable web service using Java and Spring Boot. The project will start with a basic setup and incrementally add features, tests, and infrastructure as new concepts are introduced in lectures. The project will be developed in parts, culminating in a final application that incorporates version control, testing, documentation, and CI/CD.
+- **Term Project:** Throughout the semester, students will build and evolve a single, scalable web service using Java. The project is broken down into a series of checkpoints that build on each other, culminating in a final application that incorporates all concepts from the course. The goal is to build a robust, production-ready application.
+
+### Project Components & Milestones:
+The project will be developed in parts, with each part focusing on a key area of software construction:
+
+- **Part 1: Project Infrastructure & Design (Weeks 5-8)**
+  - Set up a version-controlled repository on GitHub with branch protection and automated status checks (Checkstyle, Gradle).
+  - Design the system architecture, including a system diagram and API contracts for communication between components (`@NetworkAPI`, `@ProcessAPI`, `@ConceptualAPI`).
+  - Define the core computation for the compute engine.
+
+- **Part 2: Implementation & Testing (Weeks 8-12)**
+  - Implement the core components of the compute engine: coordination, computation, and data storage.
+  - Develop a comprehensive test suite, including unit tests for each component and integration tests to verify component interactions.
+  - Implement robust error handling to gracefully manage invalid inputs and unexpected failures.
+
+- **Part 3: Concurrency, Networking & Performance (Weeks 12-14)**
+  - Enhance the compute engine to handle multiple simultaneous user requests using multi-threading.
+  - Set up a full Continuous Integration/Continuous Deployment (CI/CD) pipeline using GitHub Actions to automate builds, testing, and deployments.
+  - Integrate gRPC for efficient, cross-network communication between system components.
+  - Identify and resolve performance bottlenecks through profiling and benchmarking.
+
+The final project submission will be graded on functionality, design, documentation, testing, and adherence to process requirements (e.g., code reviews, commit history).
 
 ## Grading
-- Homework: 20%
-- Term Project: 40%
-- Midterm Exam: 15%
+- Homework: 25%
+- Term Project: 25% (split between checkpoints and the final submission)
+- Midterm Exam: 25%
 - Final Exam: 25%
