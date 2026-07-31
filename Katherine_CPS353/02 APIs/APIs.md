@@ -1,6 +1,13 @@
 ---
 
 marp: true
+size: 16:9
+marp: true
+theme: default
+
+---
+
+# APIs
 
 ---
 
@@ -8,85 +15,113 @@ marp: true
 
 ---
 
-Common pitfall: start with the details first
+## Bottom-Up Design
 
-![width:500px](img/APIs_0.jpg)
+### Common pitfall: Starting with the details first
+
+Your first instinct is to start coding the first component you think of, then move on to the next, and so on. This often leads to a tangled mess of code that is difficult to maintain and extend.
+
+![width:400px](img/APIs_0.jpg)
 
 ---
 
-Better solution: Figure out how all the components fit together first\, then build them
+## Top-Down Design
 
-![width:500px](img/APIs_1.jpg)
+#### Better solution: Decide how the components fit together, then build them
+
+Figuring out the overall architecture first allows you to focus on one component at a time, and makes it easier to reason about how the system works as a whole.
+
+![width:400px](img/APIs_1.jpg)
+
+---
+
+## Building a System
+
+We have decided on the Top-Down approach, but how do we actually build a system? And how do the components interact with each other?
+
+Let's start with component communication. 
 
 ---
 
 # What is an API?
 
-__A__ pplication  __P__ rogramming  __I__ nterface
+**A**pplication **P**rogramming **I**nterface
 
-Sits between layers or components in a system
-
-Defines a  __contract __ for how the components will behave
-
-Anything that an external component  __relies on__  is part of the API
+ - It sits between **layers** or **components** in a system and allows them to communicate with each other.
+- It defines a **contract** for how the components will behave.
+- It encompasses everything an external component **relies on** to interact with the system.
+---
 
 # API Example
 
-Cars have an API:
+### Cars have an API:
 
-Use the steering wheel to steer\, the gas to go\, the brake to stop
+- Use the steering wheel to steer
+- The gas to go
+- The brake to stop
 
-Users don't need to know the details:
 
-Drive\-by\-wire vs mechanical linkages
+### Users don't need to know the details:
 
-Different types of brake disks
+- Drive\-by\-wire vs mechanical linkages
 
-How an internal combustion engine works
+- Different types of brake disks
+
+- How an internal combustion engine works
+
+---
+
+  
 
 # Why APIs?
 
-Allows  __interacting __ with a component without knowing the  __details __ of how it works
 
-Important for scaling software:
 
-Each piece is complicated\, no one can keep track of all details at once
+Allows  __interacting__ with a component without knowing the  __details__ of how it works
 
-APIs let you focus on just one piece at a time
 
-Any separation between components has an  __implicit__  API\, but not necessarily a good one \(organic APIs are usually bad\)
+### Important for scaling software:
 
-Side benefit: Promotes better design
+- Each piece is complicated\, no one can keep track of all details at once
 
-Highly\-coupled components tend to be  __fragile__
+### APIs let you focus on just one piece at a time
 
-APIs push design to a  __top\-down__  approach\, which produces more flexible and simpler coding than bottom\-up design
+- Any separation between components has an  **implicit**  API\,  not necessarily a good one \(organic APIs are usually bad\)
 
+### Side benefit: Promotes better design
+
+- Highly\-coupled components tend to be  __fragile__
+
+- APIs push design to a  __top\-down__  approach\, which produces more flexibility 
+
+---
 # Component APIs
 
-Any boundary between components needs an API
+Any boundary between components needs an API:
 
-__network __ boundaries
+- **Network** boundary
 
-__process __ boundaries
+- **Process** boundary
 
-__conceptual __ boundaries
+- **Conceptual** boundary
 
-![](img/APIs_2.png)
+![width:600px](img/APIs_2.png)
+
+---
 
 # System Design Diagram
 
-Used to identify where APIs are needed
+- Used to identify where APIs are needed
 
-Helpful first step before architecting a large system
+- Helpful first step before architecting a large system
 
-Useful for parallelizing work across many people/teams
+- Useful for parallelizing work across many people/teams
 
-Acts like an informal UML
+- Acts like an informal UML
 
-__Not a Flowchart__
 
-![](img/APIs_3.png)
+
+![width:600px](img/APIs_3.png)
 
 Start with an overall workflow for the system
 
@@ -993,4 +1028,3 @@ Associate with a  __pull request__
 Optional\, can be good practice with a bug queue
 
 Lightweight\, not integrated with github: Asana
-
