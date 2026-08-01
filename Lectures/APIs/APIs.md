@@ -102,7 +102,7 @@ Allows  __interacting__ with a component without knowing the  __details__ of how
 
 <style scoped>
 section {
-  font-size: 25px;
+  font-size: 23px;
   margin-top: 0px;
 }
 </style>
@@ -118,7 +118,7 @@ Any boundary between components needs an API:
 - **Conceptual**: Send data between different parts of the same process
  `Not enforced by hardware (newtork) or operating system (process)`
 
-![width:500px](img/APIs_2.png)
+![width:600px](img/APIs_2.png)
 
 ---
 
@@ -133,7 +133,7 @@ Label the APIs on the diagram:
 
 <style scoped>
 section {
-  font-size: 25px;
+  font-size: 23px;
   margin-top: 0px;
 }
 </style>
@@ -144,7 +144,7 @@ section {
 * **Process**: The API between the **Java Code** and the **DB** (Database), which typically crosses separate operating system processes or standard database connection daemons.
 * **Conceptual**: The API between the **DB** and the **FileSystem**, which represents logical boundaries and data organization internal to the architecture.
 
-![width:500px](img/APIs_2.png)
+![width:600px](img/APIs_2.png)
 
 ---
 
@@ -160,7 +160,7 @@ section {
 
 
 
-![width:500px](img/APIs_3.png)
+![width:600px](img/APIs_3.png)
 
 ---
 
@@ -233,6 +233,8 @@ A user will enter terms in the search bar and hit enter\. That request will go t
 
 ---
 
+# Systems Diagrams Example
+
 __Overall workflow__ :
 
 A user will enter terms in the search bar and hit enter\. That request will go to a server that will create a parsed version of the query\, then compare that against indexed data\. The results will be compiled into a user\-friendly format and then returned to the application\.
@@ -241,43 +243,76 @@ __Step 1:__  Create a component for each step
 
 ![](img/APIs_4.png)
 
+---
+
+# Systems Diagrams Example
+
 __Step 2:__  Add server/process boundary boxes
 
 ![](img/APIs_5.png)
+
+---
+
+# Systems Diagrams Example
 
 __Step 3:__  Draw component interactions
 
 ![](img/APIs_6.png)
 
+---
+
+# Systems Diagrams Example
+
 __Step 4:__  Combine request/response components & remove extra boxes
 
 ![](img/APIs_7.png)
 
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Systems Diagrams Example
+
 Now we can read the required APIs off the diagram:
 
-one network API from the search bar to the network\-facing server \(needs  __wire __ compatibility\)
+- One network API from the search bar to the network facing server (needs  *wire* compatibility)
 
-one internal/in\-process API from the networking layer to the query\-parsing/translation component
+- One internal in-process API from the networking layer to the query-parsing/translation component
 
-one internal/in\-process API from the parsing component to the indexed data searching component\.
+- One internal in-process API from the parsing component to the indexed data searching component.
 
 ![](img/APIs_8.png)
+
+---
+
+<style scoped>
+section {
+  font-size: 22px;
+}
+</style>
 
 # Your turn!
 
 Create a systems diagram for the following workflow:
 
-A user will enter data in a website form and submit it\. That information will get sent to the server\, which will transform it into a SQL query and send that to a database\. The database results will get transformed back into javascript\-friendly results\, and returned to the website to be displayed\.
+A user will enter data in a website form and submit it. That information will get sent to the server, which will transform it into a SQL query and send that to a database. The database results will get transformed back into javascript-friendly results, and returned to the website to be displayed.
 
 Run through the four steps to create the systems diagram:
 
-__Initial Layout: __ For each step\, assign it to a component \- draw a  __box __ and label it
+1. **Initial Layout:** For each step, assign it to a component and draw a **box** with a label.
 
-__Environmental Features: __ Surround any components that live on either the same physical  __server __ or in the same  __process __ with an extra box
+2. **Environmental Features:** Surround any components that live on either the same physical **server** or in the same **process** with an extra box.
 
-__Interactions: __ Each time a component interacts with another\, draw an  __arrow __ to connect them \- these will be the APIs
+3. **Interactions:** Each time a component interacts with another, draw an **arrow** to connect them. These will be the APIs.
 
-__Simplify: __ Sometimes two components will be the  __request/response__  steps for a single user action; identify these and combine them into a single component\. Similarly\, if any components are the  __only component __ within a server/process boundary\, you can remove the double\-box around them\.
+4. **Simplify:** Sometimes two components will be the **request/response** steps for a single user action; identify these and combine them into a single component. Similarly, if any components are the **only component** within a server/process boundary, you can remove the double box around them.
+
+---
+
 
 # Web Form Systems Diagram
 
@@ -285,13 +320,17 @@ A user will enter data in a website form and submit it\. That information will g
 
 ![](img/APIs_9.png)
 
+---
+
 # Web Form Systems Diagram (Alt)
 
 What's different here?
 
 Why would you choose one vs the other?
 
-![](img/APIs_10.png)
+![](img/APIs_11.png)
+
+---
 
 # Designing the API
 
@@ -301,83 +340,130 @@ Each component has a copy of the contract\, but "the API" isn't a single piece o
 
 ![](img/APIs_11.png)
 
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
 # Designing a Good API
 
-APIs should be designed from the perspective of the  __user__ \, not the implementer
+APIs should be designed from the perspective of the  **user**, not the implementer
 
-Avoids a "leaky abstraction"\, where details of how a component works end up in the API
+- Avoids a "leaky abstraction", where details of how a component works end up in the API
 
-Captures behavior\, not data \(although the line can be blurry\)
+- Captures behavior, not data (although the line can be blurry)
 
-Needs enough power to be useful\, but also an easy learning curve
+- Needs enough power to be useful, but also an easy learning curve
 
-Make the common things easy\, and the weird things possible
+- Make the common things easy, and the weird things possible
 
-Remember: you can always  __add__  things to an API\, but it's difficult to  __remove__  or  __change __ things
+Remember: you can always  **add**  things to an API, but it's difficult to  **remove**  or  **change** things
 
-Initially\, aim for a Minimum Viable Product \(MVP\) approach \- what's the smallest set of things that will let a user accomplish what they need to
+Initially, aim for a Minimum Viable Product (MVP) approach - what's the smallest set of things that will let a user accomplish what they need to
+
+---
 
 # Backwards Compatibility
 
-For widely used\, public\, open source projects \(Ex: protocol buffers\, the JRE\):
+For widely used, public open source projects (Ex: protocol buffers, the JRE):
 
-Many clients
+- Many clients
 
-No complete list of all clients\, much less access to their code
+- No complete list of all clients\, much less access to their code
 
 ⇒ Breaking changes are a Big Deal\, and very rare
 
-Ever wondered why generics are wonky in Java? To maintain 1\.4/1\.5 compatibility
+Ever wondered why generics are wonky in Java? To maintain 1.4/1.5 compatibility
 
-Some APIs have a narrower scope: within a company\, team\, or project
+---
 
-Backwards compatibility is still important\!
+# Backwards Compatibility
+
+Some APIs have a narrower scope: within a company, team, or project
+
+Backwards compatibility is still important!
 
 Consider a simple web server: a client process and a server process
 
-When upgrading\, one option is to turn everything off\, upgrade everything\, and then turn it back on
+When upgrading, one option is to turn everything off, upgrade everything, and then turn it back on
 
-Ex: "Caution: AmateurHour\.com will be going down for maintenance from 3am to 6am on Friday"
+Ex: "Caution: AmateurHour.com will be going down for maintenance from 3am to 6am on Friday"
+
+
+---
 
 # Online Updates
 
-Better option: At least 2 copies of every process with network failover\.
+Better option: At least 2 copies of every process with network failover.
 
-Ex: a user is connected to Client 1\, which starts off connected to Server 1; both clients/servers are running identical software
+Ex: a user is connected to Client 1, which starts off connected to Server 1; both clients/servers are running identical software
 
 ![](img/APIs_12.png)
 
-To update to v1\.1: first stop the Server 1 process\. Client 1 will fail over to Server 2; this will at worst cause a browser\-refresh style hiccup for a user\, but typically it's not noticeable
+---
+
+  # Online Updates
+
+To update to v1.1: first stop the Server 1 process. Client 1 will fail over to Server 2; this will at worst cause a browser -refresh style hiccup for a user, but typically it's not noticeable.
 
 ![](img/APIs_13.png)
 
-Now\, update the binaries on the server\, start Server 1 back up\, and do the same for Server 2
+---
+
+# Online Updates
+
+Now, update the binaries on the server, start Server 1 back up, and do the same for Server 2.
 
 ![](img/APIs_14.png)
 
-Once the servers are updated\, the clients can get sequentially updated as well\. All of this relies on a client running v1\.0 still being able to talk to a server with v1\.1\, which means the API must be  __backwards compatible__  for at least one version
+---
+
+# Online Updates
+
+Once the servers are updated, the clients can get sequentially updated as well. All of this relies on a client running v1.0 still being able to talk to a server with v1.1, which means the API must be **backwards compatible** for at least one version.
 
 ![](img/APIs_15.png)
 
-In practice\, this whole process is often automated\, with Server 1 having to pass some automated health checks before Server 2 gets upgraded\, as part of a  __continuous deployment__  pipeline
+---
 
-![](img/APIs_16.png)
+# Online Updates
 
-![](img/APIs_17.png)
+In practice, this whole process is often automated, with Server 1 having to pass some automated health checks before Server 2 gets upgraded, as part of a **continuous deployment**  pipeline.
+
+![](img/APIs_12.png)
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Types of Backwards Compatibility
 
-APIs are contract between different components\, which may change and upgrade at different rates\, with different people
+APIs are **contracts** between different components\, which may change and upgrade at different rates\, with different people.
 
-It's important to maintain  __backwards compatibility__  with an API
+It's important to maintain  **backwards compatibility**  with an API
 
-What type of backward compatibility is actually  __part__  of the API:
+What type of backward compatibility is actually  **part**  of the API:
 
-Source compatibility: code written with a previous version still compiles
+- Source compatibility: code written with a previous version still compiles
 
-Wire compatibility: an application built against a previous version can still talk to a new server
+- Wire compatibility: an application built against a previous version can still talk to a new server
 
-Semantic compatibility: an application's behavior doesn't change
+- Semantic compatibility: an application's behavior doesn't change
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Examples of Breaking Changes
 
@@ -385,15 +471,79 @@ Source compatibility: code written with a previous version still compiles
 
 Previous API:
 
-public Set\<Object> createCollection\(\);
-
+```java
+public Set<Object> createCollection();
+```
 Breaking Change:
 
-public Collection\<Object> createCollection\(\);
+```java
+public Collection<Object> createCollection();
+```
 
-Non\-breaking Change: returning a HashSet instead of a TreeSet
+Why would this break?
 
-⇒ Make your return types as  __general __ as possible
+---
+
+![](img/collections.webp)
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Examples of Breaking Changes
+
+Previous API:
+
+```java
+public Set<Object> createCollection();
+```
+Breaking Change:
+
+```java
+public Collection<Object> createCollection();
+```
+
+The client code expects a Set, but Collection is more general and doesn't have the same guarantees as Set. The client code may be relying on the fact that the returned collection has no duplicates, which is guaranteed by Set but not by Collection.
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Examples of Non-Breaking Changes
+
+Previous API:
+
+```java
+public Set<Object> createCollection();
+```
+Non-breaking Change:
+
+```java
+public TreeSet<Object> createCollection();
+```
+
+A non-breaking change is one that maintains the guarantees of the previous API. In this case, TreeSet is a specific implementation of Set, so it still satisfies the contract of returning a Set.
+
+
+⇒ Make your return types as  **general** as possible
+
+---
+
+<style scoped>
+section {
+  font-size: 23px;
+}
+</style>
+
+# Examples of Breaking Changes
 
 Wire compatibility: an application built against a previous version can still talk to a new server
 
@@ -401,17 +551,21 @@ Previous API:
 
 Using default Java serialization:
 
-public Widget createWidget\(\);
+```java
+public Widget createWidget();
+```
 
 Breaking Change:
 
 Create a new class that implements Widget and return it; Java serialization will fail on the application side
 
-Non\-breaking Change:
+Non-breaking Change:
 
 Use an explicitly backwards/forwards compatible wire format such as JSON or protocol buffers
 
 ⇒ Make  __serialization __ and  __persistence__  explicit parts of the API
+
+---
 
 # Design For Change - Versioning
 
