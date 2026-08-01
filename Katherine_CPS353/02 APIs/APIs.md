@@ -2,7 +2,6 @@
 
 marp: true
 size: 16:9
-marp: true
 theme: default
 
 ---
@@ -71,7 +70,12 @@ Let's start with component communication.
 
 ---
 
-  
+<style scoped>
+section {
+  font-size: 24px;
+  margin-top: 0px;
+}
+</style>
 
 # Why APIs?
 
@@ -95,17 +99,52 @@ Allows  __interacting__ with a component without knowing the  __details__ of how
 - APIs push design to a  __top\-down__  approach\, which produces more flexibility 
 
 ---
+
+<style scoped>
+section {
+  font-size: 25px;
+  margin-top: 0px;
+}
+</style>
+
 # Component APIs
 
 Any boundary between components needs an API:
 
-- **Network** boundary
+- **Network**: Send data between different computers
 
-- **Process** boundary
+- **Process**: Send data between different processes on the same computer
 
-- **Conceptual** boundary
+- **Conceptual**: Send data between different parts of the same process
+ `Not enforced by hardware (newtork) or operating system (process)`
 
-![width:600px](img/APIs_2.png)
+![width:500px](img/APIs_2.png)
+
+---
+
+# Component APIs
+
+Label the APIs on the diagram:
+
+![width:700px](img/APIs_2.png)
+
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+  margin-top: 0px;
+}
+</style>
+
+# Component APIs
+
+* **Network**: The API between the **Web Server** and the **Web Page**, which facilitates communication across client and server network boundaries.
+* **Process**: The API between the **Java Code** and the **DB** (Database), which typically crosses separate operating system processes or standard database connection daemons.
+* **Conceptual**: The API between the **DB** and the **FileSystem**, which represents logical boundaries and data organization internal to the architecture.
+
+![width:500px](img/APIs_2.png)
 
 ---
 
@@ -121,43 +160,68 @@ Any boundary between components needs an API:
 
 
 
-![width:600px](img/APIs_3.png)
+![width:500px](img/APIs_3.png)
 
-Start with an overall workflow for the system
+---
 
-__Initial Layout: __ For each step\, assign it to a component \- draw a  __box __ and label it
+# System Design Diagram
 
-__Environmental Features: __ Surround any components that live on either the same physical  __server __ or in the same  __process __ with an extra box
+## Start with an overall workflow for the system
 
-__Interactions: __ Each time a component interacts with another\, draw an  __arrow __ to connect them \- these will be the APIs
+<style scoped>
+section {
+  font-size: 23px;
+}
+</style>
 
-__Simplify: __ Sometimes two components will be the  __request/response__  steps for a single user action; identify these and combine them into a single component\. Similarly\, if any components are the  __only component __ within a server/process boundary\, you can remove the double\-box around them\.
+1. **Initial Layout**: For each step, assign it to a component draw a box and label it.
 
-__Note: __ a component from 'outside' a box should only interact with the outermost layer\, which in turn will interact with internal components; this separates external and internal APIs to simplify backwards\-compatibility guarantees
+2. **Environmental Features:** Surround any components that live on either the same physical computer or in the same process with an extra box.
+
+3. **Interactions:** Each time a component interacts with another, draw an arrow to connect them. These will be the APIs.
+
+4. **Simplify:** Sometimes two components will be the **request/response**  steps for a single user action; identify these and combine them into a single component. Similarly if any components are the  **only component** within a server/process boundary, you can remove the double box around them.
+
+__Note:__ a component from 'outside' a box should only interact with the outermost layer\, which in turn will interact with internal components; this separates external and internal APIs to simplify backwards\-compatibility guarantees
+
+---
+
+# System Design Diagram
 
 When have you simplified enough?
 
-\- Whenever possible\, have  __pairs of arrows__  between components representing  __request/response __ pairs
+ - Whenever possible, have **pairs of arrows** between components representing **request/response** pairs
 
 A system with a  __single arrow__  is unusual and more complicated:
 
-A single arrow means there  __is no response__  to indicate that a task is completed\, successful\, or failed
+- A single arrow means there  **is no response** to indicate that a task is completed, successful, or failed.
 
-Any such system also needs components to  __monitor and potentially redo __ the task in question
+- Any such system also needs components to **monitor and potentially redo** the task in question
 
-# Systems Design Diagrams - Removing Single Arrows
+---
 
-Protocols with no response \(SMTP\): "resend this email"
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
-No way to remove the single arrow\, just build a way to re\-send
+# Systems Design Diagrams:  Single Arrows
 
-Tasks with delayed response:
+Both of these scenarios represent single arrows in a systems design diagram.
 
-Add some sort of id/lookup key response
+#### For protocols with no response ( SMTP): "Resend this email."
 
-Add another component to "check status" using the key
+There is no way to remove the single arrow, you just need to build a way to resend.
 
-ex: placing an order on a website returns an order number\, which allows someone to look up the status of the order over several days
+#### Tasks with delayed response:
+
+* Add some sort of ID or lookup key response
+* Add another component to "check status" using the key
+
+*Example:* Placing an order on a website returns an order number, which allows someone to look up the status of the order over several days.
+
+---
 
 # Systems Diagrams Example
 
@@ -166,6 +230,8 @@ Example: Adding a 'Search' feature to an application
 __Overall workflow__ :
 
 A user will enter terms in the search bar and hit enter\. That request will go to a server that will create a parsed version of the query\, then compare that against indexed data\. The results will be compiled into a user\-friendly format and then returned to the application\.
+
+---
 
 __Overall workflow__ :
 
