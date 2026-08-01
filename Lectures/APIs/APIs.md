@@ -539,17 +539,16 @@ A non-breaking change is one that maintains the guarantees of the previous API. 
 
 <style scoped>
 section {
-  font-size: 23px;
+  font-size: 22px;
 }
 </style>
 
 # Examples of Breaking Changes
-
-Wire compatibility: an application built against a previous version can still talk to a new server
+Wire compatibility means that the data sent over the network must be in a format that both the client and server understand. An application built against a previous version can still talk to a new server.
 
 Previous API:
 
-Using default Java serialization:
+Using default Java serialization (Serializable interface) to send a Widget object over the wire:
 
 ```java
 public Widget createWidget();
@@ -557,63 +556,72 @@ public Widget createWidget();
 
 Breaking Change:
 
-Create a new class that implements Widget and return it; Java serialization will fail on the application side
+- Create a new class that implements Widget and return it; Java serialization will fail on the application side
 
 Non-breaking Change:
 
-Use an explicitly backwards/forwards compatible wire format such as JSON or protocol buffers
+- Use an explicitly backwards/forwards compatible wire format such as JSON or protocol buffers
 
-⇒ Make  __serialization __ and  __persistence__  explicit parts of the API
+⇒ Make **serialization** and **persistence** explicit parts of the API
 
 ---
 
 # Design For Change - Versioning
 
-Any time something is  __serialized __ or  __persisted__  it should have a version number
+Any time something is  **serialized**  or  **persisted**  it should have a version number
 
-Default for java Serializable is serialVersionUID
+- Default for java Serializable is serialVersionUID
 
 Two major properties:
 
-The version number should an incrementing sequence
+- The version number should an incrementing sequence
 
-Version should be automatically set given the compiled version of the code: ex: protocolBufferBuilder\.setVersion\(VERSION\);
+- Version should be automatically set given the compiled version of the code: ex: protocolBufferBuilder\.setVersion\(VERSION\);
+
+---
+<style scoped>
+section {
+  font-size: 14px;
+}
+</style>
 
 # Examples of Breaking Changes
 
-Semantic compatibility: an application's behavior doesn't change
+Semantic compatibility: an application behavior does not change
 
 Previous API:
 
-public float parseString\(String number\) throws NumberFormatException;
+````java
+public float parseString(String number) throws NumberFormatException;
+````
 
 Breaking Change:
 
-/\* Returns Float\.NaN if the number doesn't parse \*/
+````java
+/* Returns Float.NaN if the number fails to parse */
+public float parseString(String number);
+````
 
-public float parseString\(String number\);
+⇒ Build in **error handling** from the beginning
 
-⇒ Build in  __error handling__  from the beginning
+**Nonbreaking Change:**
 
-__Non\-breaking Change: __
+````java
+@Deprecated /** Prefer parseStringNoThrow */
+public default float parseString(String number) throws NumberFormatException {
+  float result = parseStringNoThrow(number);
+  if (Float.isNaN(result)) {
+    throw new NumberFormatException();
+  }
+  return result;
+}
 
-__@deprecated /\*\* Prefer parseStringNoThrow \*/__
+/* Returns Float.NaN if the number fails to parse */
+public float parseStringNoThrow(String number);
+````
 
-__public default float parseString\(String number\) throws NumberFormatException \{__
-
-__  float result = parseStringNoThrow\(number\);__
-
-__  if \(result == Float\.NaN\) \{__
-
-__    throw new NumberFormatException\(\);__
-
-__  \}__
-
-__\} __
-
-__/\* Returns Float\.NaN if the number doesn't parse \*/__
-
-__public float parseStringNoThrow\(String number\);__
+Build in **error handling** from the beginning.
+---
 
 # Number of Versions of Compatibility
 
