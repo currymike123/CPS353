@@ -100,8 +100,6 @@ In Git, a history is a directed acyclic graph (DAG) of snapshots.
 Each snapshot refers to a set of “parents”, the snapshots that preceded it.
 Git calls these snapshots “commits”. The "o" in the diagram below represents a commit, and the arrows point to its parent(s).
 
-
-
 ```
 o <-- o <-- o <-- o (master)
             ^
@@ -138,14 +136,15 @@ Commits in Git are immutable. Any "edits" to commit history create entirely new 
 type blob = array<byte>
 
 // a directory contains named files and directories
-type tree = map<string, tree | blob>
+type tree = map<string, tree | blob> //string is the name of the file or directory
 
 // a commit has parents, metadata, and the top-level tree
+// a struct is a record type, similar to a class with only public fields
 type commit = struct {
-    parents: array<commit>
+    parents: array<commit> // array of pointers to parent commits
     author: string
     message: string
-    snapshot: tree
+    snapshot: tree // pointer to the top-level tree of the snapshot
 }
 ```
 
@@ -161,7 +160,7 @@ type object = blob | tree | commit
 In Git’s data store, all objects are content-addressed by their SHA-1 hash.
 
 ```java
-objects = map<string, object>
+objects = map<string, object> //string is the SHA-1 hash of the object
 
 def store(object):
     id = sha1(object)
