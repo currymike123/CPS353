@@ -533,7 +533,7 @@ public TreeSet<Object> createCollection();
 A non-breaking change is one that maintains the guarantees of the previous API. In this case, TreeSet is a specific implementation of Set, so it still satisfies the contract of returning a Set.
 
 
-⇒ Make your return types as  **general** as possible
+Make your return types as  **general** as possible
 
 ---
 
@@ -544,7 +544,7 @@ section {
 </style>
 
 # Examples of Breaking Changes
-Wire compatibility means that the data sent over the network must be in a format that both the client and server understand. An application built against a previous version can still talk to a new server.
+**Wire compatibility** means that the data sent over the network must be in a format that both the client and server understand. An application built against a previous version can still talk to a new server.
 
 Previous API:
 
@@ -562,15 +562,15 @@ Non-breaking Change:
 
 - Use an explicitly backwards/forwards compatible wire format such as JSON or protocol buffers
 
-⇒ Make **serialization** and **persistence** explicit parts of the API
+Make **serialization** and **persistence** explicit parts of the API
 
 ---
 
 # Design For Change - Versioning
 
-Any time something is  **serialized**  or  **persisted**  it should have a version number
+Any time something is  **serialized** (converted to a byte stream)  or  **persisted** (saved to disk)  it should have a version number
 
-- Default for java Serializable is serialVersionUID
+- Default for Java Serializable is serialVersionUID
 
 Two major properties:
 
@@ -587,7 +587,7 @@ section {
 
 # Examples of Breaking Changes
 
-Semantic compatibility: an application behavior does not change
+**Semantic compatibility** means that an application's behavior doesn't change.
 
 Previous API:
 
@@ -604,7 +604,7 @@ public float parseString(String number);
 
 ⇒ Build in **error handling** from the beginning
 
-**Nonbreaking Change:**
+**Non-breaking Change:**
 
 ````java
 @Deprecated /** Prefer parseStringNoThrow */
@@ -621,237 +621,312 @@ public float parseStringNoThrow(String number);
 ````
 
 Build in **error handling** from the beginning.
+
 ---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Number of Versions of Compatibility
 
-Large open\-source projects will typically support APIs for many years
+Large open-source projects will typically support APIs for many years
 
-Breaking changes are indicated by incrementing the  __major __ version number
+- Breaking changes are indicated by incrementing the  **major** version number
 
-Internal\-only or smaller projects may have shorter support windows
+Internal only or smaller projects may have shorter support windows
 
-Most common is one  __minor__  release
+- Most common is one  **minor**  release
 
-Version numbers: major\.minor\.hotfix/patch \(ex: Java 1\.6\.u45\)
+Version numbers: **major**.**minor**.**hotfix/patch** 
+-  Java 1.6.u45 major=1, minor=6, hotfix=45
 
-Generally\,  __deprecate__  functionality for one support window\, then remove it
+Generally,  **deprecate**  functionality for one support window, then remove it.
+
+- Deprecating an API alerts developers that a feature will be removed in a future release, giving them a defined deprecation window (typically one minor release cycle for internal projects, or one major release cycle for public APIs) to migrate off the legacy code before it is fully deleted.
+
+---
 
 # API Design Feels Backwards
 
-Up until now: I want to build a thing → I go build the thing
+Up until now: I want to build a thing -> I go build the thing.
 
-New and improved: I want to build a thing → I go do something else entirely\, and then eventually come back to building the thing
+New and improved: I want to build a thing -> I go do something else entirely (System Design), and then eventually come back to building the thing.
 
-Seems  __counterintuitive__ \, but trust the process\! Somewhere around the middle of the semester\, suddenly all that "something else entirely" will really start to pay off
+Seems  **counterintuitive**, but trust the process! Somewhere around the middle of the semester, suddenly all that "something else entirely" will really start to pay off.
 
-Initial API Design steps don't seem to be  __getting anywhere__
+---
 
-Think of it like an image loading over time \- the first few steps are really blurry\, but they're still important
+# API Design Feels Backwards
+
+Initial API Design steps don't seem to be **getting anywhere**
+
+Think of it like an image loading over time - the first few steps are really blurry, but they're still important.
 
 ![](img/APIs_18.gif)
 
+---
+
 # API Example: Building a Server For a Website
 
-After building the System Design Diagram\, focus on each API between components
+After building the System Design Diagram\, focus on each API between components.
 
-Ex:
-
-A user \(via their browser\) will connect to a web server for a social media site\. Initially\, we just want the user to be able to view their profile and make changes to it\.
+- A user \(via their browser\) will connect to a web server for a social media site\. Initially\, we just want the user to be able to view their profile and make changes to it\.
 
 ![](img/APIs_19.gif)
 
+---
+
+# API Example: Building a Server For a Website
+
 __Step 1__ : Identify the  __client__
 
-In this case\, the website frontend
+In this case\, the website frontend.
 
-Note that the client isn't always a person\, or the  __end user__  \- the client of an API is the person or \(usually\) program that will be interacting with it directly
+*Note:* The client isn't always a person, or the  **end user**. In most cases, the client is another piece of code that interacts with your system.
+
+---
 
 # Your Turn! (Part 1 of Many)
 
-After seeing how each piece works with our social media site example\, you’ll implement the same part of the process with a different system
+After seeing how each piece works with our social media site example, you’ll implement the same part of the process with a different system
 
-Goal: You've been asked to build a key\-value store system\, where another program can store and retrieve arbitrary bytes of data\.
+Goal: You've been asked to build a key-value store system, where another program can store and retrieve arbitrary bytes of data.
 
-Step 1: Who is the  __client __ for this system?
+Step 1: Who is the **client** for this system?
+
+
+---
+
 
 # Part 1 Solution
 
 Goal: You've been asked to build a key\-value store system\, where clients can store and retrieve arbitrary bytes of data\.
 
-The  __client __ will likely be another piece of code:
+The **client** will likely be another piece of code:
 
-web server
+- Web server
 
-another backend server
+- Another backend server
 
-probably not an actual person
+- Probably not an actual person
 
-⇒ The user can be trusted \(mostly\)
+*Note:* The client isn't hostile and can be trusted. The client is likely unique, no need to manage different profiles.
 
-⇒ The user \(for a given system\) is likely  __unique__  \- no need to manage different profiles
-
-![](img/APIs_20.gif)
+---
 
 # API Example: Building a Server For a Website
 
-__Step 2:__  List out what the user needs to be able to do\.
+**Step 2:**  List out what the user needs to be able to do.
 
-In our case\, that might be:
+In our case, that might be:
 
-Log in to the site
+- Log in to the site
 
-Load a profile
+- Load a profile
 
-Make changes to a profile
+- Make changes to the profile
+
+---
 
 # Your Turn! (Part 2)
 
-Goal: You've been asked to build a key\-value store system\, where clients can store and retrieve arbitrary bytes of data\.
+Goal: You've been asked to build a key-value store system, where clients can store and retrieve arbitrary bytes of data.
 
-The  __client __ will be another piece of code \(some sort of server\)
+The **client** will be another piece of code (some sort of server)
 
-Step 2: List out what operations the client will need to perform
+Step 2: List out what operations the client will need to perform.
+
+---
 
 # Step 2 Solution
 
-Goal: You've been asked to build a key\-value store system\, where clients can store and retrieve arbitrary bytes of data\.
+Goal: You've been asked to build a key-value store system, where clients can store and retrieve arbitrary bytes of data.
 
 The functionality it needs to support:
 
-Store bytes of data
+1. Store bytes of data
 
-Later\, look up the corresponding data
+2. Later, look up the corresponding data
+
+
+---
 
 # Writing the Actual API
 
-__Step 3:__  Build a prototype
+**Step 3:**  Build a prototype
 
-To go from a high\-level approach to the actual code\, build a  __prototype use case__ \.
+To go from a high-level approach to the actual code, build a **prototype use case**.
 
-This isn't an actual website\, or anything that will ever be used; it's to iron out the details to make sure the API is both well\-specified and sufficiently powerful
+This isn't an actual website, or anything that will ever be used; it's to iron out the details to make sure the API is both well-specified and sufficiently powerful.
 
-Where the actual website will have forms for input\, responses to user actions\, etc\, the prototype just focuses on the  __interactions __ with the API
+Where the actual website will have forms for input, responses to user actions, etc, the prototype just focuses on the **interactions** with the API
 
-Start with the high\-level approach as comments\, and fill it out as you go
+Start with the high-level approach as comments, and fill it out as you go
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Writing the Actual API (Next Checkpoint)
 
-Prototypes are frequently  __JUnit Tests__ \, but we won't cover testing until next class\.
+Prototypes are frequently  __JUnit Tests__ \, we haven't covered testing just yet.
 
-For now\, the prototype for SomeApi will have the format:
+For now, the prototype for SomeApi will have the format:
 
-PrototypeSomeApi\.java:
+PrototypeSomeApi.java
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">class</span>  __ __  <span style="color:#2b91af">PrototypeSomeApi</span>  __ \{__
+```java
+public class PrototypeSomeApi {
 
-__   __  <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(SomeApi server\) \{__
+    public void prototype(SomeApi server) {
+        // prototype goes here
+    }
 
-__	 __  <span style="color:#008000">// prototype goes here</span>
+}
+```
 
-__   \}__
+This code isn't accessible from any code entry points (no main method or @Test annotation), so it will never  **run**, and that's ok!
 
-__\}__
+Prototype code just needs to **compile**!
 
-This code isn't accessible from any code entry points \(no main method or @Test annotation\)\, so it will never  __run__ \, that's ok
-
-Prototype code just needs to  __compile__
-
-![](img/APIs_21.gif)
+---
 
 # Prototype the Use Case
 
-First\, just add comments
+First, just add comments:
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(WebServer server\) \{__
+```java
+public class PrototypeSomeApi {
+    
+    public void prototype(WebServer server) {
+        // log in the user
+        // load their profile
+        // make a change to the profile
+        // reload the updated version of the profile
+    }
 
-__  __  <span style="color:#008000">// log in the user</span>
+}
 
-__  __  <span style="color:#008000">// load their profile</span>
+```
 
-__  __  <span style="color:#008000">// make a change to the profile</span>
+This step will often flag functionality that was missed during the initial brainstorming\, such as a "log out" option.
 
-__  __  <span style="color:#008000">// reload the updated version of the profile</span>
+---
 
-__\}__
+# Prototype the Use Case
 
-This step will often flag functionality that was missed during the initial brainstorming\, such as a 'log out' option
+First, just add comments
 
-![](img/APIs_22.gif)
 
-First\, just add comments
+```java
+public class PrototypeSomeApi {
+    public void prototype(WebServer server) {
+        // log in the user
+        // load their profile
+        // make a change to the profile
+        // reload the updated version of the profile
+        // log out
+    }
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(WebServer server\) \{__
 
-__  __  <span style="color:#008000">// log in the user</span>
 
-__  __  <span style="color:#008000">// load their profile</span>
+```
 
-__  __  <span style="color:#008000">// make a change to the profile</span>
+All fixed!
 
-__  __  <span style="color:#008000">// reload the updated version of the profile</span>
-
-<span style="color:#008000">  </span>  <span style="color:#008000"> __//__ </span>  <span style="color:#008000"> </span>  <span style="color:#008000"> __logout__ </span>
-
-__\}__
-
-All fixed\!
+---
 
 # Making Code Compile
 
-The previous slide created a new  __type__  \(WebServer\)
+The previous slide created a new **type**  (WebServer) that doesn't exist yet, so the code won't compile.
 
-As you're writing the code\, you want it to compile \- when you have a referenced type that you haven't implemented yet\, create it as an  __empty interface:__
+As you're writing the code, you want it to compile. When you have a referenced type that you haven't implemented yet, create it as an  **empty interface:**
 
-WebServer\.java:
+WebServer.java:
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">WebServer</span>  __ \{__
+```java
+public interface WebServer {
+    // nothing here yet!
+}
+```
 
-__  __  <span style="color:#008000">// nothing here yet\!</span>
+Your IDE can help you with this!
 
-__\}__
-
-⇒ Your IDE can help you with this\! Try hovering over the red squiggle\, and use the option to create a new type
+---
 
 # Your Turn! (Part 3)
 
-Goal: You've been asked to build a key\-value store system\, where clients can store and retrieve arbitrary bytes of data\.
+Goal: You've been asked to build a key\-value store system, where clients can store and retrieve arbitrary bytes of data.
 
-The  __client __ is another piece of code/other server
+The **client** will be another piece of code, such as another server.
 
 The functionality it needs to support:
 
-Store bytes of data
+1. Store bytes of data
 
-Later\, look up the corresponding data
+2. Later, look up the corresponding data
 
-Create a  __PrototypeDataStore\.java__  with the comments \+ methods version of the API
+Create a  **PrototypeDataStore.java**  with the comments and  methods version of the API.
 
-__Hint__ : This should compile\, so you may need to create an empty interface
+*Hint*: This should compile, so you may need to create an empty interface
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Part 3 Solution
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(DataStore dataStore\) \{__
+PrototypeDataStore.java:
 
-__    __  <span style="color:#008000">// store some data</span>
+```java
 
-__    __  <span style="color:#008000">// retrieve the data</span>
+public class PrototypeDataStore {
 
-__\}__
+    public void prototype(DataStore dataStore) {
+        // store some data
+        // retrieve the data
+    }
 
-__DataStore\.java:__
+}
+```
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStore</span>  __ \{__
+DataStore.java:
 
-__   __  <span style="color:#008000">// nothing here yet</span>
+```java
+public interface DataStore {
+    // nothing here yet!
+}
+```
 
-__\}__
-
-![](img/APIs_23.gif)
+---
 
 # Prototype the Use Case
 
-__Step 4__ : Fill out the template
+**Step 4** : Fill out the template
+
+```java
+public void prototype(WebServer server) {
+    // log in the user: what do we need to build a LoginRequest?
+    LoginResponse response = server.login(new LoginRequest());
+    // load their profile
+    // make a change to the profile
+    // reload the updated version of the profile
+    // log out
+}
+
+
+```
 
 <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(WebServer server\) \{__
 
@@ -870,6 +945,8 @@ __  __  <span style="color:#008000">// log out</span>
 __\}__
 
 Often\, filling in the first few lines doesn't seem like it's actually clarifying anything\, but you'll notice we now have two concrete interfaces and a method\. Remember\, this first pass is still fairly high\-level and vague; leave further needed details as comments
+
+---
 
 # API Design Best Practice: Always Have a Return Value
 
