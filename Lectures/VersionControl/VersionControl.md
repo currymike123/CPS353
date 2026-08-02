@@ -133,18 +133,17 @@ Commits in Git are immutable. Any "edits" to commit history create entirely new 
 
 ```java
 // a file is a bunch of bytes
-type blob = array<byte>
+class Blob { byte[] contents; }
 
-// a directory contains named files and directories
-type tree = map<string, tree | blob> //string is the name of the file or directory
+// A directory contains named files and directories
+class Tree { Map<String, Object> entries; } // Where Object can be Blob or Tree
 
-// a commit has parents, metadata, and the top-level tree
-// a struct is a record type, similar to a class with only public fields
-type commit = struct {
-    parents: array<commit> // array of pointers to parent commits
-    author: string
-    message: string
-    snapshot: tree // pointer to the top-level tree of the snapshot
+// A commit has parents, metadata, and the top-level tree
+class Commit {
+    List<Commit> parents; // List of pointers to parent commits
+    String author;
+    String message;
+    Tree snapshot; // Pointer to the top-level tree of the snapshot
 }
 ```
 
@@ -155,19 +154,21 @@ type commit = struct {
 An “object” is a blob, tree, or commit.
 
 ```java
-type object = blob | tree | commit
-```
-In Git’s data store, all objects are content-addressed by their SHA-1 hash.
+interface GitObject {} // Represents a common interface for Blob, Tree, and Commit
 
-```java
-objects = map<string, object> //string is the SHA-1 hash of the object
+// In Git’s data store, all objects are content-addressed by their SHA-1 hash.
+class ObjectStore {
+    Map<String, GitObject> objects; // String is the SHA-1 hash of the object
 
-def store(object):
-    id = sha1(object)
-    objects[id] = object
+    public void store(GitObject object) {
+        String id = sha1(object); // Assume sha1 is a utility function
+        objects.put(id, object);
+    }
 
-def load(id):
-    return objects[id]
+    public GitObject load(String id) {
+        return objects.get(id);
+    }
+}
 ```
 Objects reference other objects by their hash.
 
@@ -184,19 +185,25 @@ section {
 References are human-readable names for SHA-1 hashes. They are pointers to commits and are mutable.
 
 ```java
-references = map<string, string>
+class ReferenceStore {
+    Map<String, String> references; // String is the name of the reference, String is the SHA-1 hash
 
-def update_reference(name, id):
-    references[name] = id
+    public void updateReference(String name, String id) {
+        references.put(name, id);
+    }
 
-def read_reference(name):
-    return references[name]
+    public String readReference(String name) {
+        return references.get(name);
+    }
 
-def load_reference(name_or_id):
-    if name_or_id in references:
-        return load(references[name_or_id])
-    else:
-        return load(name_or_id)
+    public GitObject loadReference(String nameOrId, ObjectStore objectStore) { // Assuming ObjectStore is available
+        if (references.containsKey(nameOrId)) {
+            return objectStore.load(references.get(nameOrId));
+        } else {
+            return objectStore.load(nameOrId); // Try loading directly by ID if not a named reference
+        }
+    }
+}
 ```
 
 `master` is a reference that usually points to the latest commit in the main branch. `HEAD` is a special reference to the current snapshot.
