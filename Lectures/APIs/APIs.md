@@ -1344,7 +1344,7 @@ Ex: the number of threads to use for an execution. Depending on the program, you
 
 How to implement this?
 
-For **cross-network/cross-process** APIs, typically done during deserialization
+For **cross-network/cross-process** APIs, typically done during deserialization.
 
 For **in-process** APIs, typically done by overloading a method:
 
