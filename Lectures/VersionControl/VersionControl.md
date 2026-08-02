@@ -71,15 +71,15 @@ This rule simplifies dependency management and avoids "dependency hell."
 
 # Git’s data model
 
-Git’s ingenuity is in its well-thought-out data model that enables all the nice features of version control. Git's inferace may be confusing and ugly, but its data model is simple and elegant.  We will learn Git from the bottom-up, starting with its data model.
+Git’s ingenuity is in its well-thought-out data model that enables all the nice features of version control. Git's interface may be confusing and ugly, but its data model is simple and elegant.  We will learn Git from the bottom-up, starting with its data model.
 
 ---
 
 ## Snapshots
 
-Git models the history of a collection of files and folders as a series of snapshots.
-- A file is a “blob” (a bunch of bytes).
-- A directory is a “tree” (maps names to blobs or trees).
+Git models the history of a collection of files and folders as a series of **snapshots**.
+- A file is a **blob** (a bunch of bytes).
+- A directory is a **tree** (maps names to blobs or trees).
 - A snapshot is the top-level tree that is being tracked.
 
 ```
@@ -96,9 +96,9 @@ Git models the history of a collection of files and folders as a series of snaps
 
 ## Modeling history: relating snapshots
 
-In Git, a history is a directed acyclic graph (DAG) of snapshots.
-Each snapshot refers to a set of “parents”, the snapshots that preceded it.
-Git calls these snapshots “commits”. The "o" in the diagram below represents a commit, and the arrows point to its parent(s).
+In Git, a history is a **directed acyclic graph (DAG)** of snapshots.
+Each snapshot refers to a set of **parents**, the snapshots that preceded it.
+Git calls these snapshots **commits**. The "o" in the diagram below represents a commit, and the arrows point to its parent(s).
 
 ```
 o <-- o <-- o <-- o (master)
@@ -125,7 +125,7 @@ o <-- o <-- o <-- o <---------o  (master)
            (Base Commit)  (Merge Commit)
 ```
 
-Commits in Git are immutable. Any "edits" to commit history create entirely new commits rather than altering existing ones. 
+Commits in Git are **immutable**. Any **edits** to commit history create entirely new commits rather than altering existing ones.
 
 ---
 
