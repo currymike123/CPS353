@@ -925,411 +925,460 @@ public void prototype(WebServer server) {
     // log out
 }
 
-
 ```
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(WebServer server\) \{__
 
-__  __  <span style="color:#008000">// log in the user: what do we need to build a LoginRequest?</span>
-
-__  LoginResponse response = server\.login\(__  <span style="color:#0000ff">new</span>  __ LoginRequest\(\)\);__
-
-__  __  <span style="color:#008000">// load their profile</span>
-
-__  __  <span style="color:#008000">// make a change to the profile</span>
-
-__  __  <span style="color:#008000">// reload the updated version of the profile</span>
-
-__  __  <span style="color:#008000">// log out</span>
-
-__\}__
-
-Often\, filling in the first few lines doesn't seem like it's actually clarifying anything\, but you'll notice we now have two concrete interfaces and a method\. Remember\, this first pass is still fairly high\-level and vague; leave further needed details as comments
+Often, filling in the first few lines doesn't seem like it's actually clarifying anything, but you'll notice we now have two concrete interfaces and a method. Remember, this first pass is still fairly high-level and vague; leave further needed details as comments.
 
 ---
 
 # API Design Best Practice: Always Have a Return Value
 
-LoginResponse login\(LoginRequest loginRequest\);
+```java
+LoginResponse login(LoginRequest loginRequest);
+```
 
-Why not  __void__ ?
+Why not  **void** ?
 
 Return values allow you to:
 
-Handle error cases more gracefully
+- Handle error cases more gracefully
 
-Propagate exceptions across network/process boundaries
+- Propagate exceptions across network/process boundaries
 
-Add functionality later without breaking backwards compatibility
+- Add functionality later without breaking backwards compatibility
+
+---
 
 # Prototype the Use Case
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testWebServer\(WebServer server\) \{__
+```java
+public void testWebServer(WebServer server) {
+    // log in the user: what do we need to build a LoginRequest?
+    LoginResponse loginResponse = server.login(new LoginRequest());
 
-__  __  <span style="color:#008000">// log in the user: what do we need to build a LoginRequest?</span>
+    // load their profile
+    if (loginResponse.success()) {
+        ProfileLoadResponse profileLoadResponse = server.loadProfile(loginResponse.getUserIdentifier());
+    }
 
-__  LoginResponse loginResponse = server\.login\(__  <span style="color:#0000ff">new</span>  __ LoginRequest\(\)\);__
+    // make a change to the profile
+    // reload the updated version of the profile
+    // log out
+}
+```
 
-__  __  <span style="color:#008000">// load their profile</span>
 
-__  __  <span style="color:#0000ff">if</span>  __ \(loginResponse\.success\(\)\) \{__
 
-__    ProfileLoadResponse profileLoadResponse = server\.loadProfile\(loginResponse\.getUserIdentifier\(\)\);__
+As we fill out the next few lines, we'll start to implicitly fill out some of the interfaces; we need to know if the login worked, and in order to load a profile we need a user id, which we would have to get from the login info (good thing we had a response!)
 
-__  \}__
-
-__  __  <span style="color:#008000">// make a change to the profile</span>
-
-__  __  <span style="color:#008000">// reload the updated version of the profile</span>
-
-__  __  <span style="color:#008000">// log out</span>
-
-__\}__
-
-__As we fill out the next few lines\, we'll start to implicitly fill out some of the interfaces; we need to know if the login worked\, and in order to load a profile we need a user id\, which we would have to get from the login info \(good thing we had a response\!\)__
+---
 
 # API Design Best Practice: Wrapper Interfaces
 
-ProfileLoadResponse loadProfile\(UserIdentifier user\);
+```java
+ProfileLoadResponse loadProfile(UserIdentifier user);
+```
 
 Why not 'String username' or 'long userId'?
 
-Exactly\!
+Exactly!
 
-How the system wants to implement a unique id per user is an  __implementation detail__
+How the system wants to implement a unique id per user is an **implementation detail**.
 
-Leaving it unspecified allows for a flexible implementation\, or multiple/changing implementations
+Leaving it unspecified allows for a flexible implementation\, or multiple/changing implementations.
+
+---
 
 # Prototype the Use Case
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testWebServer\(WebServer server\) \{__
+```java
+public void testWebServer(WebServer server) {
+    // log in the user: what do we need to build a LoginRequest?
+    LoginResponse loginResponse = server.login(new LoginRequest());
 
-__  __  <span style="color:#008000">// log in the user: what do we need to build a LoginRequest?</span>
+    // load their profile
+    if (loginResponse.success()) {
+        ProfileLoadResponse profileLoadResponse = server.loadProfile(loginResponse.getUserIdentifier());
+    
+    // make a change to the profile: what do we need to create one of these
+        ProfileChangeRequest changeRequest = new ProfileChangeRequest();
+        ProfileChangeResponse profileChangeResponse = server.updateProfile(loginResponse.getUserIdentifier(), changeRequest);
 
-__  LoginResponse loginResponse = server\.login\(__  <span style="color:#0000ff">new</span>  __ LoginRequest\(\)\);__
+    // reload the updated version of the profile
+        profileLoadResponse = server.loadProfile(loginResponse.getUserIdentifier());
+    
+    // log out
+        server.logout(loginResponse.getUserIdentifier());
+    }
+}
+```
 
-__  __  <span style="color:#008000">// load their profile</span>
+---
 
-__  __  <span style="color:#0000ff">if</span>  __ \(loginResponse\.success\(\)\) \{__
-
-__    ProfileLoadResponse profileLoadResponse = server\.loadProfile\(loginResponse\.getUserIdentifier\(\)\);__
-
-__  __  <span style="color:#008000">// make a change to the profile: what do we need to create one of these</span>
-
-__    ProfileChangeRequest changeRequest = __  <span style="color:#0000ff">new</span>  __ ProfileChangeRequest\(\);__
-
-__    ProfileChangeResponse profileChangeResponse = server\.updateProfile\(loginResponse\.getUserIdentifier\(\)\, changeRequest\);__
-
-__  __  <span style="color:#008000">// reload the updated version of the profile</span>
-
-__  profileLoadResponse = server\.loadProfile\(loginResponse\.getUserIdentifier\(\)\);__
-
-__  __  <span style="color:#008000">// log out</span>
-
-__  server\.logout\(loginResponse\.getUserIdentifier\(\)\);__
-
-__  \}__
-
-__\}__
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # API Design Best Practice: Many Object Interfaces
 
-ProfileChangeResponse changeProfile\(UserIdentifier user\, ProfileChangeRequest request\);
+```java
+ProfileChangeResponse changeProfile(UserIdentifier user, ProfileChangeRequest request);
+```
 
 Shouldn't we be reusing code and combining some of these response values?
 
-Nope\!
+Nope!
 
-Copy\-pasting  __logic __ is bad\, that's something you encapsulate and re\-use
+- Copy-pasting  **logic** is bad, that's something you encapsulate and re\-use
 
-Reusing  __methods__  is also a good idea
+-   Reusing  **methods**  is also a good idea
 
-On the other hand\, allow wrapper  __interfaces __ to proliferate wildly
+- On the other hand, allow wrapper **interfaces** to proliferate wildly
 
 Leaving these separate allows for future flexibility
 
-reuse is great for situations where you control all uses of the code\, but APIs are the opposite
+- Reuse is great for situations where you control all uses of the code\, but APIs are the opposite
 
-tldr:  __Types __ = don't reuse\,  __Methods__  = do reuse
+tldr: **Types** = don't reuse, **Methods** = do reuse
+
+---
 
 # Writing the actual API: Method Signatures
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">WebServer</span>  __ \{__
+```java
 
-__  LoginResponse login\(LoginRequest loginRequest\);__
+public interface WebServer {
 
-__  ProfileLoadResponse loadProfile\(UserIdentifier user\);__
+    LoginResponse login(LoginRequest loginRequest);
 
-__  ProfileChangeResponse changeProfile\(UserIdentifier user\, ProfileChangeRequest request\);__
+    ProfileLoadResponse loadProfile(UserIdentifier user);
 
-__  LogoutResponse logout\(UserIdentifier user\);__
+    ProfileChangeResponse changeProfile(UserIdentifier user, ProfileChangeRequest request);
 
-__\}__
+    LogoutResponse logout(UserIdentifier user);
+
+}
+```
+
+
+---
 
 # Your Turn!
 
 Recall from earlier:
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(DataStore dataStore\) \{__
+```java
+public void prototype(DataStore dataStore) {
+    // store some data
+    // retrieve the data
+}
+```
 
-__    __  <span style="color:#008000">// store some data</span>
+DataStore.java
 
-__    __  <span style="color:#008000">// retrieve the data</span>
+```java
+public interface DataStore {
+    // nothing here yet!
+}
+``` 
+Now, fill out each commented line, generating interfaces/methods in DataStore as necessary to make everything compile.
 
-__\}__
-
-__DataStore\.java:__
-
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStore</span>  __ \{__
-
-__   __  <span style="color:#008000">// nothing here yet</span>
-
-__\}__
-
-__Now\, fill out each commented line\, generating interfaces/methods in DataStore as necessary to make everything compile__
+---
 
 # Prototyped Data Storage Layer
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ prototype\(DataStore dataStore\) \{__
+```java
+public void prototype(DataStore dataStore) {
 
-__  __  <span style="color:#008000">// store some data</span>
+    // store some data
+    DataStorageResponse storeResponse = dataStore.storeData(new DataStorageRequest());
 
-__  DataStorageResponse storeResponse = dataStore\.storeData\(__  <span style="color:#0000ff">new</span>  __ DataStorageRequest\(\)\);__
+    // retrieve the data
+    DataLoadResponse loadResponse = dataStore.loadData(storeResponse.getDataKey());
+}
+```                       
 
-__  __  <span style="color:#008000">// retrieve the data</span>
 
-__  DataLoadResponse loadResponse = dataStore\.loadData\(storeResponse\.getDataKey\(\)\);__
+---
 
-__\}__
+# Prototyped Data Storage Layer
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStore</span>  __ \{__
+```java
+public interface DataStore {
 
-__  DataStorageResponse storeData\(DataStorageRequest request\);__
+    DataStorageResponse storeData(DataStorageRequest request);
 
-__  DataLoadResponse loadData\(DataStorageKey key\);__
+    DataLoadResponse loadData(DataStorageKey key);
 
-__\}__
+}
+```
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStorageRequest</span>  __ \{__
+---
 
-__  __  <span style="color:#008000">// TBD</span>
+# Prototyped Data Storage Layer
 
-__\}__
+```java
+public interface DataStorageRequest {
+    // TBD
+}
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStorageResponse</span>  __ \{__
+public interface DataStorageResponse {
 
-__  DataStorageKey getDataKey\(\);__
+    DataStorageKey getDataKey();
 
-__\}__
+}
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataStorageKey</span>  __ \{__
+public interface DataStorageKey {
+    // TBD
+}
 
-__  __  <span style="color:#008000">// TBD</span>
+public interface DataLoadResponse {
+    // TBD
+}
 
-__\}__
+```
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">DataLoadResponse</span>  __ \{__
-
-__  __  <span style="color:#008000">// TBD</span>
-
-__\}__
+---
 
 # Writing the actual API: Filling in the Rest
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">LoginResponse</span>  __ \{__
+```java
+public interface LoginResponse {
 
-__  __  <span style="color:#2b91af">boolean</span>  __ success\(\); __  <span style="color:#008000">// Oh no\! Booleans are bad</span>
+    boolean success(); //Oh no! Booleans are bad!
 
-__  UserIdentifier getUserIdentifier\(\);__
+    UserIdentifier getUserIdentifier();
 
-__\}__
+}
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">UserIdentifier</span>  __ \{__
+public interface UserIdentifier {
+    // TBD
+}
+```
 
-__  __  <span style="color:#008000">// marker interface</span>
+---
 
-__\}__
 
 # API Design Best Practice: Booleans are Bad (Usually)
 
-Problem 1: Very inflexible \(only ever has two values\)
+Problem 1: Very inflexible (only ever has two values)
 
-What happens if we want to add details about why the login failed?
+- What happens if we want to add details about why the login failed?
 
 Problem 2: Not self\-documenting
 
-ex: server\.loadProfile\(true\, false\, true\, true\, false\, ""\);
+- ex: server\.loadProfile\(true\, false\, true\, true\, false\, ""\);
 
-__The fix__ : Enums
+**The fix**: Enums
+
+---
 
 # Enums (Enumerations)
 
-Alternative to listing out a bunch of constants
+Alternative to listing out a bunch of constants.
 
-Use ==\, not \.equals\(\)
+Use ==, not .equals()
 
-Should only be used for known\-at\-compile\-time\, immutable state
+Should only be used for known-at-compile-time, immutable state. Meaning the set of possible values is fixed and cannot change at runtime.
+
+---
 
 # Updated API
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">interface</span>  __ __  <span style="color:#2b91af">LoginResponse</span>  __ \{__
+```java
+public interface LoginResponse {
 
-__  LoginResponseCode getResponseCode\(\); __
+    LoginResponseCode getResponseCode();
 
-__  UserIdentifier getUserIdentifier\(\);__
+    UserIdentifier getUserIdentifier();
 
-__\}__
+}
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">enum</span>  __ LoginResponseCode \{__
+public enum LoginResponseCode {
 
-__  SUCCESS\,__
+    SUCCESS,
+    FAILURE;
 
-__  FAILURE;__
+}
+```
 
-__\}__
+---
+
 
 # Updated Prototype
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testWebServer\(WebServer server\) \{__
+```java
+public void testWebServer(WebServer server) {
 
-__  LoginResponse loginResponse = server\.login\(__  <span style="color:#0000ff">new</span>  __ LoginRequest\(\)\);__
+  LoginResponse loginResponse = server.login(new LoginRequest());
 
-__  __  <span style="color:#008000">// load their profile</span>
+  // load their profile
+  if (loginResponse.getResponseCode() == LoginResponseCode.SUCCESS) {
+    // etc
+  }
 
-__  __  <span style="color:#0000ff">if</span>  __ \(loginResponse\.getResponseCode\(\) == LoginResponseCode\.SUCCESS\) \{__
+}
+```
 
-__ __  <span style="color:#008000">// etc</span>
+Better for flexibility, but we've sacrificed some usability. We've made it harder to do the "easy thing" (check if a login was successful) and easier to do the "hard thing" (get details about the login failure).
 
-__\}__
 
-Better for flexibility\, but we've sacrificed some usability
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Encapsulated Booleans
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">enum</span>  __ LoginResponseCode \{__
+```java
+public enum LoginResponseCode {
 
-__  SUCCESS\(__  <span style="color:#0000ff">true</span>  __\)\,__
+  SUCCESS(true),
+  FAILURE(false);
 
-__  FAILURE\(__  <span style="color:#0000ff">false</span>  __\);__
+  private boolean success;
 
-__  __  <span style="color:#0000ff">private</span>  __ __  <span style="color:#2b91af">boolean</span>  __ success;__
+  private LoginResponseCode(boolean success) {
+    this.success = success;
+  }
 
-__  __  <span style="color:#0000ff">private</span>  __ LoginResponseCode\(__  <span style="color:#2b91af">boolean</span>  __ success\) \{    __
+  public boolean success() {
+    return success;
+  }
 
-__    __  <span style="color:#0000ff">this</span>  __\.success = success;__
+}
+```
 
-__  \}__
+*Note:* Adding a layer of **indirection** gives us flexibility plus usability.
 
-__  __  <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">boolean</span>  __ success\(\) \{__
 
-__    __  <span style="color:#0000ff">return</span>  __ success;__
-
-__  \}__
-
-__\}__
-
-__Adding a layer of __  __indirection __  __gives us flexibility plus usability__
+---
 
 # More Updated Prototype
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testWebServer\(WebServer server\) \{__
+```java
 
-__  LoginResponse loginResponse = server\.login\(__  <span style="color:#0000ff">new</span>  __ LoginRequest\(\)\);__
+public void testWebServer(WebServer server) {
 
-__  __  <span style="color:#008000">// load their profile</span>
+  LoginResponse loginResponse = server.login(new LoginRequest());
 
-__  __  <span style="color:#0000ff">if</span>  __ \(loginResponse\.getResponseCode\(\)\.success\(\)\) \{__
+  // load their profile
+  if (loginResponse.getResponseCode().success()) {
+    // etc
+  }
 
-__ __  <span style="color:#008000">// etc</span>
+}
+```
 
-__\}__
+That looks better! The 'easy thing' (see if a login happened) is still easy, but now more complicated things (details of the login success/failure) are possible.
 
-That looks better\! The 'easy thing' \(see if a login happened\) is still easy\, but now more complicated things \(details of the login success/failure\) are possible
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Encapsulated Booleans
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">enum</span>  __ LoginResponseCode \{__
+```java
+public enum LoginResponseCode {
 
-__  SUCCESS\(__  <span style="color:#0000ff">true</span>  __\)\,__
+  SUCCESS(true),
+  FAILURE(false);
+  UNKNOWN_USERNAME(false);
 
-__  FAILURE\(__  <span style="color:#0000ff">false</span>  __\)\,__
+  private boolean success;
 
-__  UNKNOWN\_USERNAME\(__  <span style="color:#0000ff">false</span>  __\);__
+  private LoginResponseCode(boolean success) {
+    this.success = success;
+  }
 
-__  __  <span style="color:#0000ff">private</span>  __ __  <span style="color:#2b91af">boolean</span>  __ success;__
+  public boolean success() {
+    return success;
+  }
 
-__  __  <span style="color:#0000ff">private</span>  __ LoginResponseCode\(__  <span style="color:#2b91af">boolean</span>  __ success\) \{    __
+}
+```
 
-__    __  <span style="color:#0000ff">this</span>  __\.success = success;__
+We can add more detailed failure modes in a **backwards-compatible way**.
 
-__  \}__
+---
 
-__  __  <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">boolean</span>  __ success\(\) \{__
-
-__    __  <span style="color:#0000ff">return</span>  __ success;__
-
-__  \}__
-
-__\}__
-
-__We can add more detailed failure modes in a __  __backwards\-compatible __  __way__
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
 
 # Default Values
 
 "Make the common case easy"
 
-Wherever possible\, provide default values in the API \(usually  __configuration __ settings\)
+Wherever possible, provide default values in the API (usually **configuration settings**)
 
-Built\-in example use case
+- Built-in example use case
+- Low cost to start using the API
+- Note that changing a default is a **semantic** break; use commonly-useful defaults rather than sentinel values
 
-Low cost to start using the API
+Ex: the number of threads to use for an execution. Depending on the program, you might use:
 
-Note that changing a default is a  __semantic__  break; use commonly\-useful defaults rather than sentinel values
+- 1 ⇒ Multi-threading is an advanced option not generally needed
 
-Ex: the number of threads to use for an execution\. Depending on the program\, you might use:
+- 4 ⇒ Given how the code is written, more threads will tend to get stuck waiting on locks
 
-1 ⇒ Multi\-threading is an advanced option not generally needed
+- Runtime.getRuntime().availableProcessors() ⇒ Allows the program to self-tune by default
 
-4 ⇒ Given how the code is written\, more threads will tend to get stuck waiting on locks
+- -1 ⇒ This would be a bad default value
 
-Runtime\.getRuntime\(\)\.availableProcessors\(\) ⇒ Allows the program to self\-tune by default
+---
 
-\-1 ⇒ This would be a bad default value
+# Default Values
 
 How to implement this?
 
-For  __cross\-network/cross\-process __ APIs\, typically done during deserialization
+For **cross-network/cross-process** APIs, typically done during deserialization
 
-For  __in\-process__  APIs\, typically done by overloading a method:
+For **in-process** APIs, typically done by overloading a method:
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">default</span>  __ __  <span style="color:#2b91af">int</span>  __ calculateValue\(__  <span style="color:#2b91af">int</span>  __ input\) \{__
+```java
+public default int calculateValue(int input) {
+    return calculateValue(input, DEFAULT_NUM_THREADS);
+}
 
-__    __  <span style="color:#0000ff">return</span>  __ calculateValue\(input\, DEFAULT\_NUM\_THREADS\);__
+public int calculateValue(int input, int nThreads);
+```
 
-__\}__
-
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">int</span>  __ calculateValue\(__  <span style="color:#2b91af">int</span>  __ input\, __  <span style="color:#2b91af">int</span>  __ nThreads\);__
-
+---
 # Let's Review!
 
 What you should know about API Design that might be on an exam:
 
-__Design principles for an API__ : What the design process is\, what concerns to keep in mind\, common pitfalls/best practices
+**Design principles for an API** : What the design process is\, what concerns to keep in mind\, common pitfalls/best practices
 
-__Prototyping an API__ : What this looks like\, why it's useful
+**Prototyping an API** : What this looks like\, why it's useful
 
-__Types of backwards compatibility__ : What they are\, when to use them
+**Types of backwards compatibility** : What they are\, when to use them
 
-__Systems Diagrams__ : What they are\, how to draw them\, why to use them
+**Systems Diagrams** : What they are\, how to draw them\, why to use them
+
+---
 
 # Checkpoint 2: APIs for the Project
 
-__Github Issues__ :
+**Github Issues** :
 
-Useful for tracking bugs\, feature requests\, and \(for this assignment\)  __tasks__
+Useful for tracking bugs\, feature requests\, and \(for this assignment\)  **tasks**
 
-Associate with a  __pull request__
+Associate with a  **pull request**
 
-Optional\, can be good practice with a bug queue
+Optional, can be good practice with a bug queue
 
-Lightweight\, not integrated with github: Asana
+Lightweight, not integrated with github: Asana
