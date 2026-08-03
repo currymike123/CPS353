@@ -70,13 +70,13 @@ Version Control + Local Checkout + Build Tool + IDE + Testing Framework + CI/CD
 
 # Specific Tools
 
-Git/GitHub = required
-Gradle = required
-Eclipse = recommended
-IntelliJ = allowed
-VS Code = allowed
-JUnit = required
-Java = required!!!
+**Git/GitHub** = required
+**Gradle** = required
+**Eclipse** = recommended
+**IntelliJ** = allowed
+**VS Code** = allowed
+**JUnit** = required
+**Java** = required!!!
 
 ---
 
@@ -96,7 +96,110 @@ Code quality refers to the characteristics of code that make it reliable, mainta
 - **Reliable**: Functions correctly and is robust to errors.
 - **Efficient**: Uses resources wisely.
 
-This lecture will cover tools and practices to improve code quality.
+---
+
+# Code Review
+
+Your code will be read by other developers, your future self, and more LLMs.
+
+Best practices make the process:
+- **Lightweight**: Easy to review and understand.
+- **Effective**: Catches issues early and improves code quality.
+- **Pleasant**: Encourages collaboration and knowledge sharing.
+
+---
+
+![bg center width:700px](img/Infrastructure%20Slides_20.png)
+
+---
+
+<style scoped>
+section {
+  font-size: 24px;
+}
+</style>
+
+# Structure your code
+
+Style **conventions** are aspects of code not enforced by the compiler but are important for readability and maintainability.
+
+Clear and understandable:
+```java
+int getWidth() { 
+    return width;
+}
+
+retangle.getWidth(); 
+```
+Unclear and confusing:
+```java
+int Width(){retun a};
+
+b.Width();
+```
+
+Your code should be readable and understandable by other developers, including your future self.
+
+---
+
+# Structure your code
+
+Typical style conventions include:
+- Methods and variables begind with a lowercase letter. (e.g., `getWidth()`, `width`)
+- Constants are in all uppercase letters with underscores separating words. (e.g., `MAX_WIDTH`)
+- Classes and interfaces begin with an uppercase letter. (e.g., `Rectangle`, `TestCase`)
+
+Optional style conventions:
+- Indentation: tabs vs 2 spaces vs 4 spaces
+- { on the same line vs on a new line
+
+---
+
+<style scoped>
+section {
+  font-size: 24px;
+}
+</style>
+
+# Structure your code
+
+**Commenting** your code is important for readability and maintainability. Comments should explain **why** something is done, not **what** is done. I can look at the code to see what it does. Your implementation could have been done in many different ways, but you chose this way. Why?
+
+Don't just explain **what**:
+```java
+// Checks if password length is greater than or equal to 12
+if (password.length() >= 12) {
+    savePassword(password);
+}
+```
+
+Explain **why**:
+```java
+// NIST 800-63B guidelines require a minimum of 12 characters to prevent dictionary attacks
+if (password.length() >= 12) {
+    savePassword(password);
+}
+```
+
+---
+
+# Structure your code
+
+Remember good **object oriented design** principles:
+
+- A **class** should have a single responsibility/concept.
+- A **method** should have one task/behavior.
+
+If you can't explain what a class or method does in one sentence, it probably has too many responsibilities and should be split into multiple classes or methods.
+
+```java
+getWidthAndHeight()
+```
+
+```java
+getWidth()
+getHeight()
+```
 
 ---
 
