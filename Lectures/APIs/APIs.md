@@ -20,7 +20,7 @@ theme: default
 
 Your first instinct is to start coding the first component you think of, then move on to the next, and so on. This often leads to a tangled mess of code that is difficult to maintain and extend.
 
-![width:400px](img/APIs_0.jpg)
+![bg right width:500px](img/APIs_0.jpg)
 
 ---
 
@@ -30,7 +30,7 @@ Your first instinct is to start coding the first component you think of, then mo
 
 Figuring out the overall architecture first allows you to focus on one component at a time, and makes it easier to reason about how the system works as a whole.
 
-![width:400px](img/APIs_1.jpg)
+![bg right width:500px](img/APIs_1.jpg)
 
 ---
 
@@ -118,7 +118,7 @@ Any boundary between components needs an API:
 - **Conceptual**: Send data between different parts of the same process
  `Not enforced by hardware (newtork) or operating system (process)`
 
-![width:600px](img/APIs_2.png)
+![bg right width:600px](img/APIs_2.png)
 
 ---
 
@@ -126,7 +126,7 @@ Any boundary between components needs an API:
 
 Label the APIs on the diagram:
 
-![width:700px](img/APIs_2.png)
+![bg right width:600px](img/APIs_3.png)
 
 
 ---
@@ -144,7 +144,7 @@ section {
 * **Process**: The API between the **Java Code** and the **DB** (Database), which typically crosses separate operating system processes or standard database connection daemons.
 * **Conceptual**: The API between the **DB** and the **FileSystem**, which represents logical boundaries and data organization internal to the architecture.
 
-![width:600px](img/APIs_2.png)
+![bg right width:600px](img/APIs_3.png)
 
 ---
 
@@ -160,7 +160,7 @@ section {
 
 
 
-![width:600px](img/APIs_3.png)
+![bg right width:600px](img/APIs_3.png)
 
 ---
 
