@@ -203,6 +203,25 @@ getHeight()
 
 ---
 
+# Structure your code
+
+Every rule has exceptions. Sometimes it is better to break the rules for clarity and maintainability.
+
+```java
+//Represents a deck of cards. Supports shuffling and dealing.
+
+public class Deck {
+    List<Card> cards;
+    public void shuffle() {}
+    public Card deal() {}
+}
+```
+
+There are multiple sentences and an 'and', but there's a single 'data' concept and the two 'behaviors' are both closely related to the data and in separate methods. 
+
+
+---
+
 # Formatting
 
 Code formatters automatically apply a consistent style to your code. This eliminates debates over style and improves readability.
