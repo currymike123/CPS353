@@ -205,7 +205,9 @@ getHeight()
 
 # Structure your code
 
-Every rule has exceptions. Sometimes it is better to break the rules for clarity and maintainability.
+### Every rule has exceptions. 
+
+Sometimes it is better to break the rules for clarity and maintainability.
 
 ```java
 //Represents a deck of cards. Supports shuffling and dealing.
@@ -219,6 +221,85 @@ public class Deck {
 
 There are multiple sentences and an 'and', but there's a single 'data' concept and the two 'behaviors' are both closely related to the data and in separate methods. 
 
+
+---
+
+<style scoped>
+section {
+  font-size: 20px;
+}
+</style>
+
+# Structure your code
+
+### Bad examples:
+
+```java
+// Represents card numbers and suits.
+public class Deck {
+    List<Integer> cardNumbers;
+    List<String> cardSuits;     
+}
+```
+
+The "and" here is a red flag. Managing raw parallel lists creates fragile data structures. Cards should be **encapsulated** into their own class.
+
+```java
+/* Represents a deck of cards. Supports shuffling and coordinates placing pieces on a game board. */
+public class Deck {
+    List<Card> cards;
+    GameBoard board;
+
+    public void shuffle() {}
+    public void placePieceOnBoard(Piece piece) {}
+}
+```
+
+Here, the "and" is a true red flag. The two behaviors belong to entirely different domains. A deck of cards should not handle game board placement logic.
+
+
+---
+
+# Structure your code
+
+Code should not be surprising:
+
+Main.java
+
+```java
+System.out.println("Rectangle width: " + rectangle.getWidth());
+```
+
+Rectangle.java
+
+```java
+public int getWidth() {
+    setHieght(3); // This is surprising! A getter should not have side effects.
+    return width;
+}
+```
+
+You should not be surprised by what a method does. If a method has side effects, it should be clearly documented and named appropriately.
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Structure your code
+
+Manage your commit messages and history. 
+
+- Each commit should represent a single logical change. 
+- Avoid large commits that mix multiple changes together.
+- Less than 200 lines of non-auto-generated code is a good rule of thumb for a single commit.
+- A single feature/bug/task!
+- Detailed description of the change.
+
+![bg right width:550px](img/Infrastructure%20Slides_26.png)
 
 ---
 
