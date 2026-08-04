@@ -18,21 +18,21 @@ This course is guided by three core principles for building robust software:
   - Introduction to Version Control with Git (basic commands, branching, merging)
   - Collaborative workflows with GitHub (Pull Requests, Code Reviews)
 
-### Weeks 3-4: Building & Testing
-- **Topics:**
-  - Introduction to Build Tools (Gradle)
-  - Managing Dependencies & Building JARs
-  - The Importance of Testing: Writing Unit Tests with JUnit
-  - Test-Driven Development (TDD) as a design practice
-
-### Week 5: API Design & Project Kickoff
+### Week 3-4: API Design & Project Kickoff
 - **Topics:**
   - Designing clean and effective APIs
   - Introduction to Design Patterns
 - **Project:**
   - **Term Project Part 1 Assigned (Infrastructure & Design)**
 
-### Week 6: Code Quality & Debugging
+### Weeks 5-6: Building & Testing
+- **Topics:**
+  - Introduction to Build Tools (Gradle)
+  - Managing Dependencies & Building JARs
+  - The Importance of Testing: Writing Unit Tests with JUnit
+  - Test-Driven Development (TDD) as a design practice
+
+### Week 6: Documentation & Debugging
 - **Topics:**
   - Writing Effective Documentation (Javadoc)
   - Code Review Best Practices
