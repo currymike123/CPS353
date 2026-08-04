@@ -285,7 +285,7 @@ You should not be surprised by what a method does. If a method has side effects,
 
 <style scoped>
 section {
-  font-size: 25px;
+  font-size: 24px;
 }
 </style>
 
@@ -301,18 +301,78 @@ Manage your commit messages and history.
 
 ![bg right width:550px](img/Infrastructure%20Slides_26.png)
 
+We will go into more detail about Git and commit messages in the coming lectures.
+
+---
+
+# Reviewing code
+
+### Step 1: Grok the code (Understand it    
+
+- Read the commit summary and description.
+- Skim through the whole change.
+- Do a second pass for a deeper understanding.
+    - Make notes of anythin that looks unclear
+    - If necessary, sketch out a diagram/outline of what the change is doing.
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Reviewing code
+
+### Step 2: Comment on largers issues
+
+BE NICE!!! Criticism always feels harsher on the receiving end. Be constructive and polite.
+
+A code reivew is a conversation, not a judgement. 
+
+Topics to discuss:
+- Bugs: if something looks funcationally broken
+- Lack of testing: make sure there are at least basic tests
+- Unclear code: missing comments, code that isn't self-documenting, confusing variable/method names
+- Structural issues: layers of abstraction or API design.
+
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+}
+</style>
+
+# Reviewing code
+
+### Step 3: Proofreading for stylistic issues
+
+For smale issues: by convention, start with "nit:" E.g., "nit: rename variable to be more descriptive". Yes "Nit" is short for "nitpick". 
+
+- Whitespace/formatting issues
+- Naming issues: variable, method, class names
+- Suboptimal return statements
+    - E.g., "nit: return hasProperty() vs return hasProperty == true"
+
+These shouldn't block approvals, but should be fixed before merging. If you see a lot of these, it may indicate a larger issue with the codebase or the developer's understanding of the code.
+
+Avoid micromanaging!
+
+- Determine if another way is genuinely better, or just differen.
+
+
 ---
 
 # Formatting
 
-Code formatters automatically apply a consistent style to your code. This eliminates debates over style and improves readability.
+Code formatters automatically apply a consistent style to your code. This eliminates debates over style and improves readability. It's suboptimal to spend a lot of time on nits.
 
-- **Tools for Java**:
-    - `google-java-format`
-    - IDE built-in formatters (Eclipse, IntelliJ)
-- **EditorConfig**: Helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
+Fortunately, some of these issues can be automatically fixed with code formatters.
 
-You can set up your IDE to auto-format code on save.
+A **linter** that cleans up the "lint" in your code. The small bits of easily removed fluff that can be cleaned up automatically.
 
 ---
 
@@ -320,104 +380,188 @@ You can set up your IDE to auto-format code on save.
 
 Linters perform static analysis on your code to find potential issues, bugs, and stylistic errors without running it.
 
-- **Checkstyle for Java**: A popular linter for Java that enforces a coding standard.
+- **Checkstyle for Java**: A popular linter for Java that enforces a coding standard. We will use it in this course to enforce a consistent style and catch common issues.
 - **Linter Rules**: Linters have a set of configurable rules. You can disable rules for specific lines or files if needed.
-- **Automated Fixes**: Some linters can automatically fix the issues they find.
-- **Semgrep**: A powerful, multi-language static analysis tool that can be used to write custom rules.
 
 ---
 
-# Testing
+# Checkstyle with Github
 
-Testing is crucial for ensuring code correctness and preventing regressions.
+We are going to add checkstyle to our GitHub (to be continued in the next lecture).
 
-- **Unit Tests**: Test individual components (e.g., a single class or method). JUnit is the standard for Java.
-- **Integration Tests**: Test how multiple components work together.
-- **Functional Tests**: Test end-to-end scenarios from the user's perspective.
-- **Test-Driven Development (TDD)**: A development process where you write tests before writing the implementation.
-- **Mocking**: Using mock objects to simulate the behavior of real dependencies. Mockito is a popular mocking framework for Java.
+Every Pull Request will automatically trigger these checks:
+- Don't request a review until all checks pass.
+- They should be very quick to run and fix!
 
----
+This is an example of Continuous Integration (CI) in action. We will discuss CI/CD in more detail later in the course.
 
-## Code Coverage
-
-Code coverage measures the percentage of your code that is executed by your tests.
-
-- It helps identify untested parts of your codebase.
-- Tools like JaCoCo can generate coverage reports for Java projects.
-- **Warning**: High coverage does not guarantee high-quality tests. Focus on writing meaningful tests rather than just chasing a high coverage number.
-
----
-
-# IDEs and Build Tools
-
-- **IDEs (Integrated Development Environments)**: Tools like **Eclipse** and **IntelliJ IDEA** provide powerful features for Java development:
-    - Constant compilation and error checking.
-    - Syntax highlighting and auto-completion.
-    - Automated refactoring and code generation.
-    - Debugging tools.
-- **Build Tools**: **Gradle** and **Maven** are the standard build automation tools for Java. They manage dependencies, compile code, run tests, and package your application.
-
----
-
-# Version Control & Collaboration
-
-- **Git & GitHub**: Git is the version control system, and GitHub is a platform for hosting repositories and collaborating on code.
-- **Code Reviews**: A process where other developers review your code before it is merged. It is a critical practice for improving code quality and sharing knowledge.
-- **Pull Requests**: The standard mechanism on GitHub for proposing changes and initiating code reviews.
-- **Pair Programming**: Two developers work together at one workstation. One writes code while the other reviews it in real-time.
+*Note:* There are a lot of ways to use checkstyle. In the Gradle and in you IDE. Feel free to add additional checks to you project!
 
 ---
 
 # Continuous Integration (CI)
 
-CI is the practice of automatically building and testing your code every time a change is pushed to the repository.
+- Shorten the loop between code being written and being deployed to production.
 
-- **CI Services**: GitHub Actions, Jenkins, CircleCI.
-- **CI Pipeline**: A typical CI pipeline will:
-    1.  Run the formatter and linter.
-    2.  Compile the code.
-    3.  Run all tests.
-- **Benefits**:
-    - Catches integration issues early.
-    - Provides fast feedback to developers.
-    - Automates the release process.
+- Automate error detection, shipping, and rollbacks
 
----
+- Complexity rangers from very simple (checkstyle) to very complex (running a full test suite, building and deploying a Docker image, etc.)
 
-# Continuous Deployment (CD)
-
-Continuous Deployment is an extension of CI that automatically deploys your code to production after it passes all tests.
-
-- The Missing Semester website is an example of CD. When we push changes to the lecture notes, the site is automatically rebuilt and deployed.
-- Other artifacts like application binaries or Docker images can also be deployed automatically.
+Benefits:
+- Faster feedback
+- Easier to launch new features
+- Higher quality code
 
 ---
 
-# Pre-commit Hooks
 
-Pre-commit hooks are scripts that run automatically before each commit.
+# Pair Programming
 
-- You can use them to run formatters and linters to ensure that no poorly-formatted code or code with linter errors is committed.
-- The `pre-commit` framework is a popular tool for managing pre-commit hooks.
+Combine the coding and code review steps.
 
----
+Requires two developers working at the same time on the same screen or on a screenshare (e.g., Discord, Zoom, Google Meet, etc.) Email does not count!
 
-# Command Runners
+One person types, the other reviews.
 
-Command runners simplify running project-specific commands.
+Good for the first several commits of a large, complex architecture
+- Avoids latency and context switching from code reviews
 
-- Instead of memorizing `gradle checkstyleMain`, you can have a simple command like `gradle check`.
-- **Gradle** and **Maven** have built-in support for defining custom tasks.
+When committing, note in the **commit message** that the code was pair programmed (and with who). This should line up with the person who **approves** the pull request.
 
 ---
 
-# Regular Expressions (Regex)
+# Where to write code
 
-Regex is a powerful language for pattern matching in text.
+**I**ntegrated **D**evelopment **E**nvironments (IDEs) are software applications that provide comprehensive facilities to programmers for software development.
 
-- Used in many command-line tools (`grep`) and IDEs for searching and replacing text.
-- Can be used in testing frameworks to run a subset of tests.
-- Most programming languages, including Java, have built-in support for regex.
-- Online tools like `regex101.com` can help you build and debug regex patterns.
+- Constant compilation and error checking
+- Syntax highlighting and auto-completion
+- Automated refactoring and code generation
+- Debugging tools
+
+---
+
+# IDE for Java
+
+- **Eclipse**: Another widely used IDE for Java with extensive tooling support. (Recommended for this course)
+- **IntelliJ IDEA**: A popular IDE for Java development with powerful features and plugins. (Allowed)
+- **VS Code**: A lightweight, extensible code editor that can be configured for Java development with extensions. (Allowed)
+
+---
+
+# Unlock the Power of Your IDEA
+
+A basic text editor is not enough for professional software development. IDEs provide powerful features that can significantly improve your productivity and code quality.
+
+- Solves the complexity to type vs complexity to read. IDEs help you write code that is easier to read and understand.
+- Minimizes "toil.
+- Allows for easy navigation of object-oriented codebases..
+
+Shortcuts in the IDE are **HUGE** for productivity. Learn them and use them!
+
+
+---
+
+<style scoped>
+section {
+  font-size: 24px;
+}
+</style>
+
+# Deterministic vs Stochastic Code Generation
+
+Deterministic: Compiler and many of the IDE tools
+
+- No need to double-check output. "Just glance through the bytecode (class files) to make sure it's right" said no one ever.
+- Solves specific problems in a specific way. (e.g., auto-formatting, refactoring, code generation)
+
+Non-deterministic: LLMs and other generative AI tools
+- Must double-check output. "Just glance through the code to make sure it's right" said everyone.
+- Can attempt any problem, but no guarantee of correctness. (e.g., code generation, code completion, code explanation)
+
+> For any problem that **can** be solved deterministically, **prefer that option**
+
+This requires **knowing when those options exist**. This is a skill that comes with experience and practice.
+
+---
+
+# Organize Imports
+
+*Eclipse* shortcut: `Ctrl + Shift + O` (Windows/Linux) or `Cmd + Shift + O` (Mac)
+
+Doesn't just "orgainize" existing imports, it also adds missing imports and removes unused ones. It searches the classpath for the correct classes to import. This is a huge time saver and reduces errors.
+
+Class API design:
+- Import package structure is an **implementation detail**.
+- The library classes/interfaces are the **API**.
+
+Organize imports = "HEY IDE, I want this class. Go find it for me."
+
+---
+
+# Auto-Refactor
+
+*Eclipse* shortcut:
+- Rename: `Alt + Shift + R` (Windows/Linux) or `Cmd + Alt + R` (Mac)
+- Extract Method: `Alt + Shift + M` (Windows/Linux) or `Cmd + Alt + M` (Mac)
+
+Rename Classes/parameters/methods/interfaces
+
+Extract Methods
+
+> Reduces the cost of readability/maintainability fixes.
+
+
+---
+
+# Autocomplete
+
+*Eclipse* shortcut: `Ctrl + Space` (Windows/Linux) or `Cmd + Space` (Mac)
+
+Long variables/methods
+
+> Prioritize readability over typing effort. Use autocomplete to reduce the cost of long names.
+
+Forgot a method? The IDE is here to help!
+
+*Eclipse* shortcut: type . and wiat
+
+> Efficiently use a large number of libraries.
+
+---
+
+# Navigate Object Heierarchies
+
+*Eclipse* shortcut: `Ctrl + click` (Windows/Linux) or `Cmd + click` (Mac)
+
+Object-oriented programming has tons of classes, interfaces, methods, and variables that exist across multiple files.
+
+Navigating the file structure is very slow!
+
+> Context switching is expensive. Use the IDE to navigate the codebase efficiently.
+> Reasoning about the whole system is difficult. Use the IDE to navigate the codebase efficiently.
+
+Click through navigation in the IDE is much faster than searching through the file structure.
+
+---
+
+# Many more!
+
+Deterministic generation (no generative AI just yet):
+
+- hashcode/equals/toString generation
+- getters/setters generation
+- try/catch/finally generation
+- unimplemented methods generation
+
+Auto-save files
+
+"On save" actions (e.g., auto-format, organize imports, run linter)
+
+And a bunch more!
+
+---
+
+
+
 
