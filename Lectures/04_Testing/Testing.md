@@ -648,17 +648,20 @@ Aim for  **80-90%**  code coverage
 
 Sample Coverage Output
 
-__@Test__
+```java
+@Test
+public void testAddition() {
+  int result = new AddingMachine().add(2,3);
+  Assertions.assertEquals(5, result);
+}
+```
 
-<span style="color:#7f0055"> __public__ </span>  __ __  <span style="color:#7f0055"> __void__ </span>  __ testAddition\(\) \{__
 
-__  __  <span style="color:#7f0055"> __int__ </span>  __ __  <span style="color:#6a3e3e">result</span>  __ = __  <span style="color:#7f0055"> __new__ </span>  __ AddingMachine\(\)\.add\(2\,3\);__
 
-__  Assertions\.assertEquals\(5\, __  <span style="color:#6a3e3e">result</span>  __\);__
+![width:500px](img/TestingDebugging_19.png)
+![bg right width:500px](img/TestingDebugging_20.png)
 
-__\}__
-
-![](img/TestingDebugging_20.png)
+---
 
 # Using Test Coverage Output
 
@@ -670,59 +673,101 @@ Use the output to spot problem areas/missing testing
 
 ![](img/TestingDebugging_21.jpg)
 
+---
+
 # Fuzz Testing
 
-A version of automated  __exploratory__  testing
+A version of automated **exploratory** testing
 
 Uses randomization to test out unexpected paths
 
-Randomization in tests must be done carefully\, or the tests stop
+Randomization in tests must be done carefully, or the tests stop being useful:
 
-being useful:
+- For each test run, print the **seed** used for the random number generator
 
-For each test run\, print the  __seed__  used for the random number generator
+- Allow a **manual** run to specify a seed
 
-Allow a  __manual __ run to specify a seed
+This lets you have **repeatable** tests, which is critical for identifying and fixing bugs
 
-This lets you have  __repeatable __ tests\, which is critical for identifying and fixing bugs
+![width:200px](img/TestingDebugging_22.jpg)
 
-![](img/TestingDebugging_22.jpg)
+---
 
 # Fuzz Testing Example
 
-![](img/TestingDebugging_23.png)
+<style scoped>
+section {
+  font-size: 20px;
+ 
+}
+</style>
+
+```java
+public class TestWidget {
+
+  private static int NUM_TEST_PER_RUN = 100;
+
+  @Test
+  public void testFuzzey() {
+    long seed = System.currentTimeMillis();
+    Random rand = new Random(seed);
+    Widget testWidget = new Widget();
+    runFuzzytest(seed, random, testWidget);
+  }
+
+  private static void runFuzzyTest(long seed, Random rand, Widget testWidget) {
+    System.out.println("Running fuzzy test with seed: " + seed);
+    for (int i = 0; i < NUM_TEST_PER_RUN; i++) {
+      int a = random.nextInt();
+      Assert.assertEquals(computeSlow(a), testWidget.compute(a));
+    }
+  
+  public static void main(String[] args) {
+    long seed = Long.parseLong(args[0]);
+    Random random = new Random(seed);
+    Widget testWidget = new Widget();
+    runFuzzyTest(seed, random, testWidget);
+  }
+}
+```
+
+---
 
 # Your Turn!
 
 Check out the exercise2 package in TestingExercises
 
-Run the tests\, check that the basic  __smoke test__  passes
+Run the tests, check that the basic **smoke test** passes
 
-Using the checkComputation method\, write a fuzzy test that will add lots of different random integers
+Using the checkComputation method, write a fuzzy test that will add lots of different random integers
 
-Using the fuzzy test\, find an input that triggers the bug in AddingMachine\.java
+Using the fuzzy test, find an input that triggers the bug in AddingMachine\.java
+
+---
 
 # Software Engineering
 
-# Debugging
+### Debugging
 
-![](img/TestingDebugging_24.png)
+![width:900px](img/TestingDebugging_24.png)
+
+---
 
 # Debugging Philosophy
 
-![](img/TestingDebugging_25.png)
-
 Quick iteration is key
 
-Prefer  __many__  tests that each check one small feature
+Prefer **many** tests that each check one small feature
 
-Code complexity is  __quadratic __ with lines of code
+Code complexity is **quadratic** with lines of code
 
-Finding a bug is a  __search__  problem
+Finding a bug is a **search** problem
+
+![bg right width:300px](img/TestingDebugging_25.png)
+
+---
 
 # Design for Debugability
-
-
 
 * Keep state as local as possible
   * Local variables
@@ -731,45 +776,36 @@ Finding a bug is a  __search__  problem
   * Public data
 
 
-![](img/TestingDebugging_26.png)
+![bg right width:300px](img/TestingDebugging_26.png)
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
+
+# Design for Debugability
+
 
 Make shared data immutable wherever possible
 
 Example: Builder pattern
 
-__WidgetBuilder __ newWidget =  <span style="color:#741b47">new </span>  __WidgetBuilder\(\);__
+```java
+WidgetBuilder newWidget = new WidgetBuilder();
+newWidget.setSpinnerSpeed(getSpinnerSpeed());
+newWidget.setNumberOfGears(numGears);
+return newWidget.build();
+```
 
-__   	__ newWidget __\.setSpinnerSpeed\(getSpinnerSpeed\(\)\);__
+- **Guaranteed Immutability**: The constructed object (`Widget`) is completely read-only once instantiated, eliminating subtle state-mutation bugs across threads or methods.
+- **Atomic Construction**: Prevents invalid or partially constructed objects from circulating in your system.
+- **Easier Breakpoints**: You inspect parameter configuration during step-by-step construction, but runtime code only ever interacts with a stable, predictable object.
 
-__   	__ newWidget __\.setNumberOfGears\(numGears\);__
-
-__   	__  <span style="color:#741b47">return </span> newWidget __\.build\(\);__
-
-Create wrapper classes to keep code logic in one file
-
-<span style="color:#741b47">public class</span>  __ WidgetCache \{__
-
-__   		 __  <span style="color:#741b47">private </span>  __Map\<Long\, Widget> __  <span style="color:#0000ff">idToWidgetCache </span>  __= __  <span style="color:#741b47">new </span>  __HashMap<>\(\);__
-
-__   		 __  <span style="color:#741b47">public </span>  __Widget put\(long id\, Widget widget\) \{__
-
-__   		__  <span style="color:#0000ff">	 </span>  <span style="color:#741b47">return </span>  <span style="color:#0000ff">idToWidgetCache</span>  __\.put\(id\, widget\);__
-
-__   		 \}__
-
-__ __  <span style="color:#741b47">public </span>  __Widget get\(long id\) \{__
-
-<span style="color:#741b47">return </span>  <span style="color:#0000ff">idToWidgetCache</span>  __\.get\(id\);__
-
-__ \}__
-
-__   		 __  <span style="color:#741b47">public void </span>  __clear\(\) \{__
-
-__   			 __  <span style="color:#0000ff">idToWidgetCache</span>  __\.clear\(\);__
-
-__   		 \}__
-
-__   	 \}__
+---
 
 # Useful IDE Tools
 
