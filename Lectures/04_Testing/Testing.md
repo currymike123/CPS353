@@ -886,19 +886,32 @@ Build a smoke test first
 <style scoped>
 section {
   font-size: 20px;
- 
+}
+.split {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.column {
+  flex: 1;
 }
 </style>
 
 # Debugging Example
 
+<div class="split">
+<div class="column">
+
 Next, write the implementation
 
-We're leaving the cross-component db call unimplemented for the moment
+We leaving the cross component db call unimplemented for the moment
 
-Because we'll have that eventually, though, we need to use **lazy initialization**
+Because we will have that eventually, though, we need to use **lazy initialization**
 
 Note that you should never rely on a user to initialize!
+
+</div>
+<div class="column">
 
 ```java
 public class WrappedHashMap {
@@ -926,10 +939,10 @@ public class WrappedHashMap {
     data = new HashMap<>(initialCapacity);
   }
 }
-
 ```
 
-
+</div>
+</div>
 
 ---
 
