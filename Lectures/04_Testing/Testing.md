@@ -807,127 +807,178 @@ return newWidget.build();
 
 ---
 
+# Design for Debugability
+
+Create wrapper classes to keep code logic in one file
+
+```java
+public class WidgetCache {
+  private Map<Long, Widget> idToWidgetCache = new HashMap<>();
+
+  public Widget getWidget(long id, Widget widget) {
+    return idToWidgetCache.put(id, widget);
+  }
+
+  public Widget get(long id) {
+    return idToWidgetCache.get(id);
+  }
+
+  pulbic void clear() {
+    idToWidgetCache.clear();
+  }
+}
+```
+
+---
+
 # Useful IDE Tools
 
 Breakpoints
 
-![](img/TestingDebugging_27.png)
+![bg right width:800px](img/TestingDebugging_27.png)
+
+---
+
+# Useful IDE Tools
 
 Conditional Breakpoints
 
-![](img/TestingDebugging_28.png)
+![bg right width:800px](img/TestingDebugging_28.png)
+
+---
+
+# Useful IDE Tools
 
 Control Flow: Step in/out/over
 
-![](img/TestingDebugging_29.png)
+![bg right width:600px](img/TestingDebugging_29.png)
 
-![](img/TestingDebugging_30.png)
+---
+
+# Useful IDE Tools
 
 Tons of useful info available in the debugger
 
 Much faster to examine live vs\. println debugging
 
-![](img/TestingDebugging_31.png)
+![bg right width:600px](img/TestingDebugging_30.png)
+![width:600px](img/TestingDebugging_31.png)
 
-Drop To Frame \(Caution: Does not reset  __non\-local__  state\, such as fields\)
+---
 
-![](img/TestingDebugging_32.png)
+# Useful IDE Tools
+
+Drop To Frame (Caution: Does not reset **non-local** state, such as fields)
+
+![width:700px](img/TestingDebugging_32.png)
+
+---
 
 # Debugging Example
 
-![](img/TestingDebugging_33.png)
-
 Build a smoke test first
 
-<span style="color:#7f0055"> __public__ </span>  __ __  <span style="color:#7f0055"> __class__ </span>  __ WrappedHashMap \{__
+![bg right width:600px](img/TestingDebugging_33.png)
 
-__	__  <span style="color:#7f0055"> __private__ </span>  __ Map\<Integer\, String> __  <span style="color:#0000c0">data</span>  __;__
 
-__	__  <span style="color:#7f0055"> __private__ </span>  __ __  <span style="color:#7f0055"> __boolean__ </span>  __ __  <span style="color:#0000c0">needToInitialize</span>  __;__
+---
 
-__	__  <span style="color:#7f0055"> __public__ </span>  __ String get\(__  <span style="color:#7f0055"> __int__ </span>  __ __  <span style="color:#6a3e3e">id</span>  __\) \{__
+<style scoped>
+section {
+  font-size: 20px;
+ 
+}
+</style>
 
-__		__  <span style="color:#7f0055"> __if__ </span>  __ \(__  <span style="color:#0000c0">needToInitialize</span>  __\) \{__
+# Debugging Example
 
-__			initalize\(\);__
+Next, write the implementation
 
-__			__  <span style="color:#0000c0">needToInitialize</span>  __ = __  <span style="color:#7f0055"> __false__ </span>  __;__
+We're leaving the cross-component db call unimplemented for the moment
 
-__		\}__
+Because we'll have that eventually, though, we need to use **lazy initialization**
 
-__		__  <span style="color:#7f0055"> __return__ </span>  __ __  <span style="color:#0000c0">data</span>  __\.get\(__  <span style="color:#6a3e3e">id</span>  __\);__
+Note that you should never rely on a user to initialize!
 
-__	\}__
+```java
+public class WrappedHashMap {
+  private Map<Integer, String> data;
+  private boolean needToInitialize;
 
-__	__  <span style="color:#7f0055"> __public__ </span>  __ __  <span style="color:#7f0055"> __void__ </span>  __ put\(__  <span style="color:#7f0055"> __int__ </span>  __ __  <span style="color:#6a3e3e">id</span>  __\, String __  <span style="color:#6a3e3e">value</span>  __\) \{__
+  public String get(int id) {
+    if (needToInitialize) {
+      initalize();
+      needToInitialize = false;
+    }
+    return data.get(id);
+  }
 
-__		__  <span style="color:#7f0055"> __if__ </span>  __ \(__  <span style="color:#0000c0">needToInitialize</span>  __\) \{__
+  public void put(int id, String value) {
+    if (needToInitialize) {
+      initalize();
+      needToInitialize = false;
+    }
+    data.put(id, value);
+  }
 
-__			initalize\(\);__
+  private void initalize() {
+    int initialCapacity = 10;
+    data = new HashMap<>(initialCapacity);
+  }
+}
 
-__			__  <span style="color:#0000c0">needToInitialize</span>  __ = __  <span style="color:#7f0055"> __false__ </span>  __;__
+```
 
-__		\}__
 
-__		__  <span style="color:#0000c0">data</span>  __\.put\(__  <span style="color:#6a3e3e">id</span>  __\, __  <span style="color:#6a3e3e">value</span>  __\);__
 
-__	\}__
+---
 
-__	__  <span style="color:#7f0055"> __private__ </span>  __ __  <span style="color:#7f0055"> __void__ </span>  __ initalize\(\) \{__
+# Debugging Example
 
-__		__  <span style="color:#7f0055"> __int__ </span>  __ __  <span style="color:#6a3e3e">initialCapacity</span>  __ = 10;__
+To the debugger!
 
-__		__  <span style="color:#0000c0">data</span>  __ = __  <span style="color:#7f0055"> __new__ </span>  __ HashMap<>\(__  <span style="color:#6a3e3e">initialCapacity</span>  __\);__
+---
 
-__	\}__
-
-__\}__
-
-Next\, write the implementation
-
-We're leaving the cross\-component db call unimplemented for the moment
-
-Because we'll have that eventually\, though\, we need to use  __lazy initialization__
-
-Note that you should never rely on a user to initialize\!
-
-To the debugger\!
+# Debugging Example
 
 Recap of the process:
 
-Put a breakpoint on the failing line
+1. Put a breakpoint on the failing line
 
-Run through a test that triggers the failure\, and check instance and local variable state at the breakpoint
+2. Run through a test that triggers the failure, and check instance and local variable state at the breakpoint
 
-Add a breakpoint where the value of an incorrect variable should have changed
+3. Add a breakpoint where the value of an incorrect variable should have changed
 
-Repeat
+4. Repeat
+
+---
 
 # Your Turn!
 
-Check out the exercise3 package in TestingExercises
+1. Check out the exercise3 package in TestingExercises
 
-Run the TestCombinatorics test; it should fail
+2. Run the TestCombinatorics test; it should fail
 
-Put a breakpoint at the last line in the stack trace\, and see what variables are invalid at that line
+3. Put a breakpoint at the last line in the stack trace, and see what variables are invalid at that line
 
-Find where the invalid variable should have been set\, put another breakpoint there \(for method return values\, use the 'return' line of the method\)
+4. Find where the invalid variable should have been set, put another breakpoint there (for method return values, use the 'return' line of the method)
 
-Repeat this process \- for breakpoints within for loops\, use a conditional breakpoint to only stop the breakpoint when something interesting is happening
+5. Repeat this process - for breakpoints within for loops, use a conditional breakpoint to only stop the breakpoint when something interesting is happening
 
-Fix the bug\, and verify the test is now green
+6. Fix the bug, and verify the test is now green
+
+---
 
 # Let's Review (Testing & Debugging)
 
-Two main  __categories __ of testing: manual vs automated\, what each is good for
+- Two main **categories** of testing: manual vs automated, what each is good for
+- Three types of **regression** testing
 
-Three types of  __regression__  testing
+- What is a **mock** object and what is it used for
 
-What is a  __mock__  object and what is it used for
+- What is a **testing hook** and what is it used for
 
-What is a  __testing hook__  and what is it used for
+- What is **fuzz testing** (...and what is it used for)
 
-What is  __fuzz testing__  \(\.\.\.and what is it used for\)
-
-What are three ways to  __design for debugability __ in your code
+- What are three ways to **design for debugability** in your code
 
