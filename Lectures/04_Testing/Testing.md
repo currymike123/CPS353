@@ -161,357 +161,488 @@ public class ExampleTest {
 *Note*:  JUnit 4 vs JUnit 5: to use the more up-to-date/widely supported version, make sure to import org.junit.jupiter, not regular org.junit
 
 ---
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
 
-<span style="color:#0000ff">import</span>  __ static org\.junit\.jupiter\.api\.Assertions\.fail;__
+# Writing Tests: JUnit
 
-<span style="color:#0000ff">import</span>  __ org\.junit\.jupiter\.api\.Test;__
+```java
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">class</span>  __ __  <span style="color:#2b91af">ExampleTest</span>  __ \{__
+public class ExampleTest {
+    @Test
 
-__    @Test__
+    public void testAddition() {
+        int a = 2;
+        int b = 3;
+        if (a + b != 5) {
+            fail();
+        }
+    }
+}
+```
 
-__    __  <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testAddition\(\) \{__
 
-__        __  <span style="color:#2b91af">int</span>  __ a = 2;__
 
-__        __  <span style="color:#2b91af">int</span>  __ b = 3;__
+JUnit is a heavily **annotation-based** framework - **@Test** is the most common, but there are others (ex: @BeforeEach)
 
-__        __  <span style="color:#0000ff">if</span>  __ \(a \+ b \!= 5\) \{__
+---
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
 
-__            fail\(\);__
+# Writing Tests: JUnit
 
-__        \}__
+```java
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
-__  \}__
+public class ExampleTest {
+    @Test
 
-__\}__
+    public void testAddition() {
+        int a = 2;
+        int b = 3;
+        if (a + b != 5) {
+            fail();
+        }
+    }
+}
+```
+When a test class runs, it will run all methods with @Test as separate tests.
 
-__JUnit is a heavily __  __annotation\-based__  __ framework \- __  __@Test__  __ is the most common\, but there are others \(ex: @BeforeEach\)__
+A test **fails** if it throws an Exception, Error or other Throwable (fail() throws an AssertionError). Otherwise, it succeeds.
 
-<span style="color:#0000ff">import</span>  __ static org\.junit\.jupiter\.api\.Assertions\.fail;__
+---
 
-<span style="color:#0000ff">import</span>  __ org\.junit\.jupiter\.api\.Test;__
-
-<span style="color:#0000ff">public</span>  __ __  <span style="color:#0000ff">class</span>  __ __  <span style="color:#2b91af">ExampleTest</span>  __ \{__
-
-__    @Test__
-
-__    __  <span style="color:#0000ff">public</span>  __ __  <span style="color:#2b91af">void</span>  __ testAddition\(\) \{__
-
-__        __  <span style="color:#2b91af">int</span>  __ a = 2;__
-
-__        __  <span style="color:#2b91af">int</span>  __ b = 3;__
-
-__        __  <span style="color:#0000ff">if</span>  __ \(a \+ b \!= 5\) \{__
-
-__            fail\(\);__
-
-__        \}__
-
-__  \}__
-
-__\}__
-
-__When a test class runs\, it will run all methods with @Test as separate tests\.__
-
-__A test __  __fails __  __if it throws an Exception\, Error or other Throwable \(fail\(\) throws an AssertionError\)\. Otherwise\, it succeeds__
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
 
 # Your Turn!
 
 You'll want a project for following along for today\, so let's get that configured now
 
-Follow the Testing Exercises link on Brightspace\, and open with Github Desktop \(or preferred git client\)
+1. Follow the Testing Exercises link on Brightspace\, and open with Github Desktop \(or preferred git client\)
 
-From the command line in the repo folder\, run \./gradlew eclipse
+2. From the command line in the repo folder\, run \./gradlew eclipse
 
-Copy the ExampleTest class from the previous slide into a new file in a test folder in your repo \(TestingExercises/test/ExampleTest\.java\)
+3. Copy the ExampleTest class from the previous slide into a new file in a test folder in your repo \(TestingExercises/test/ExampleTest\.java\)
 
-Check that ExampleTest compiles and runs
+4. Check that ExampleTest compiles and runs
 
 Note: you may need to change the junit\-jupiter version in build\.gradle\, depending on what Eclipse version you have \- you can get Eclipse to tell you what it expects \(go through the steps of adding JUnit 5 as a library to your build path\, but  __don’t actually add it__ \, just grab the version info on the penultimate step\)
 
+---
+
 # When To Use Which Type of Test
 
-Remember the System Design Diagram from last week\.
+Remember the System Design Diagram.
 
-Suppose you write all the code\, fire it up\, and the search bar doesn't do anything\.
+Suppose you write all the code, fire it up, and the search bar doesn't do anything.
 
 What's broken?
 
 ![](img/TestingDebugging_1.png)
 
+---
+
 # Unit Tests: Something is Wrong Inside a Box
 
-Recall: a  __unit test__  tests just one component
+Recall: an **unit test** tests just one component
 
-If something is wrong with  __just__  the search bar\, a unit test for the search bar will fail
+If something is wrong with **just** the search bar, a unit test for the search bar will fail
 
 ![](img/TestingDebugging_2.png)
 
+---
+
 # Integration Tests: Something is Wrong Between Boxes
 
-Recall: an  __integration test__  tests multiple components \(usually 2\)
+Recall: an **integration test** tests multiple components (usually 2)
 
-If something is wrong with sending a parsed query to the indexed data\, that will cause an  __integration test__  to fail
+If something is wrong with sending a parsed query to the indexed data, that will cause an **integration test** to fail
 
 ![](img/TestingDebugging_3.png)
 
+---
+
 # End-To-End Tests: Something is Wrong Systematically
 
-Recall: an  __end\-to\-end test__  checks an entire workflow
+Recall: an **end-to-end test** checks an entire workflow
 
-If all integration and unit tests are passing\, an end\-to\-end failure will flag systemic issues \(ex: SSL configuration mismatch\)
+If all integration and unit tests are passing, an **end-to-end failure** will flag systemic issues (ex: SSL configuration mismatch)
 
 ![](img/TestingDebugging_4.png)
 
+---
+
 # Unit Tests: Just What's in One Box?
 
-How to test that 'search results display correctly' while  __only__  using code from the 'Search Bar' component?
+How to test that 'search results display correctly' while  **only**  **using code from the 'Search Bar' component?**
 
 ![](img/TestingDebugging_5.png)
 
+---
+
 # Mock Objects
 
-In order to isolate just one component for testing\, use  __mock objects__  for other components
+In order to isolate just one component for testing, use **mock objects** for other components
 
-In\-memory
+- **In-memory**
 
-Dummy implementation \(hardcoded return values for methods\)
+- **Dummy implementation** (hardcoded return values for methods)
 
-No side effects
+- **No side effects**
 
-Test\-code only \(often single\-test only\)
+- **Test-code only** (often single-test only)
 
-![](img/TestingDebugging_6.png)
+```java
+int getRandomNumber() {
+    return 42; // Chosen by fair dice roll. Guaranteed to be random ;)
+}
+```
 
-<span style="color:#0000ff">import</span>  __ org\.mockito\.Mockito;__
+---
 
-<span style="color:#0000ff">import</span>  __ static org\.mockito\.Mockito\.when;__
+# Mock Objects
 
-<span style="color:#0000ff">import</span>  __ static org\.mockito\.Mockito\.any;__
+```java
+import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+```
 
 Common Framework: Mockito
 
-Many other interesting methods that you can statically import\!
+- **when**: Specify what the mock should return for a given method call
+- **any**: Match any argument for a method call
 
-__Note__ : Most IDEs don't have good support for automatic static import detection; you may need to do this part by hand
+Many other interesting methods that you can statically import!
 
-Creating the mock object: Mockito\.mock\(\)
+**Note**: Most IDEs don't have good support for automatic static import detection; you may need to do this part by hand
 
-Interfaces
+---
 
-Non\-final classes
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
 
-![](img/TestingDebugging_7.png)
+# Mock Objects
+
+Creating the mock object: Mockito.mock()
+
+- Interfaces: Can be mocked directly
+- Non-final classes: Can be mocked directly
+
+```java
+public void testComponent() throws Exception {
+    Database mockDatabase = Mockito.mock(Database.class); // Create a mock Database object
+    when(mockDatabase.sqlQuery(any(String.class))).thenReturn(5);
+
+    AddingMachine testComponent = new AddingMachine(mockDatabase);
+    testComponent.add(2, 3);
+}
+```
+
+---
+
+# Mock Objects
 
 Dummy implementation: tell the mock how it should respond to requests
+- Anthing left unspecified will return default values and do nothing
 
-Anything left unspecified will return default values and do nothing
+```java
+public static interface Database {
+    public int sqlQuery(String query);
+}
+```
 
-![](img/TestingDebugging_8.png)
+```java
+public void testComponent() throws Exception {
+    Database mockDatabase = Mockito.mock(Database.class);
+    when(mockDatabase.sqlQuery(any(String.class))).thenReturn(5); //How should the mock respond to sqlQuery? Rreturn 5
 
-![](img/TestingDebugging_9.png)
+    AddingMachine testComponent = new AddingMachine(mockDatabase);
+    testComponent.add(2, 3);
+}
+```
 
-![](img/TestingDebugging_10.png)
 
-Use the mock to create a  __real version __ of the component to test
+---
+
+# Mock Objects
+
+Use the mock to create a  **real version** of the component to test
 
 Everything else except that one component is mocked
 
-![](img/TestingDebugging_11.png)
+```java
+public void testComponent() throws Exception {
+    Database mockDatabase = Mockito.mock(Database.class);
+    when(mockDatabase.sqlQuery(any(String.class))).thenReturn(5);
+
+    AddingMachine testComponent = new AddingMachine(mockDatabase); // The AddingMachine is a real object
+    testComponent.add(2, 3);
+}
+```
+
+
+
+---
 
 # Your Turn!
 
-Look at the exercise1 package in the TestingExercises project
+1. Look at the exercise package in the TestingExercises project
 
-Within that\, you'll find a class Widget and an interface Foo
+2. Within that, you'll find a class Widget and an interface Foo
 
-Write a test for the Widget class that uses a mock Foo object\, and verifies that calling addNumbers\(2\,3\) does not throw an Exception
+3. Write a test for the Widget class that uses a mock Foo object, and verifies that calling addNumbers(2,3) does not throw an Exception
+
+---
 
 # To the IDE!
 
+---
+
 # Internet Advice Caution
 
-Mockito\.verify is often recommended \(including in Mockito docs\) online; don't use this for unit tests/smoke tests
+Mockito.verify is often recommended (including in Mockito docs) online; don't use this for unit tests/smoke tests
 
-Annoying to configure
+- Annoying to configure
 
-Encourages bad testing practices \(change\-detection tests vs behavior tests\)
+- Encourages bad testing practices (change-detection tests vs behavior tests)
 
-Good for some highly specific use cases \(in particular\, it’s good for convincing devs with established code bases to migrate to Mockito\)
+- Good for some highly specific use cases \(in particular\, it’s good for convincing devs with established code bases to migrate to Mockito\)
 
 Advantage of Mockito over other mock frameworks \(EasyMock\, JMock\) is that you can easily avoid calling verify
 
-Look at the "stub method calls" examples instead
+- Look at the "stub method calls" examples instead
+
+---
+
+<style scoped>
+section {
+  font-size: 25px;
+ 
+}
+</style>
+
 
 # JUnit Assertions
 
-__ __  __  __  <span style="color:#7f0055"> __public__ </span>  __ __  <span style="color:#7f0055"> __void__ </span>  __ testAddition\(\) \{__
+```java
 
-__       __  <span style="color:#7f0055"> __int__ </span>  __ __  <span style="color:#6a3e3e">result</span>  __ = __  <span style="color:#7f0055"> __new__ </span>  __ AddingMachine\(\)\.add\(2\,3\);__
+public void testAddition(){
+  int result = new AddingMachine().add(2,3);
+  Assertions.assertEquals(5, result);
+}
 
-__       Assertions\.assertEquals\(5\, __  <span style="color:#6a3e3e">result</span>  __\);__
+```
 
-__   \}__
+JUnit: test fails ⇔ test throws an Exception
 
-__JUnit: test fails ⇔ test throws an Exception__
+Test logic: test fails ⇔ some condition is not met
 
-__Test logic: test fails ⇔ some condition is not met__
+Assertions translates between the two: if the two values to assertEquals aren't equal, throws AssertionFailedError.
 
-__Assertions __  __translates between the two: if the two values to assertEquals aren't equal\, throws AssertionFailedError__
+- Many\, many methods available (arrayEquals, lessThan, greaterThan, etc)
 
-__Many\, many methods available \(arrayEquals\, lessThan\, greaterThan\, etc\)__
+Version note: in Junit 4, this class was called Assert. You can almost always directly replace Assert.<method> with Assertions.<method> to convert to Junit 5.
 
-__Version note: in Junit 4\, this class was called Assert\. You can almost always directly replace __  __Assert\.\<method>__  __ with __  __Assertions\.\<method>__  __ to convert to Junit 5__
+---
 
 # Test Driven Development (TDD)
 
 Write tests as you go along:
 
-Write the API \(the  __prototype __ will often be the first test\)
+- Write the API (the **prototype** will often be the first test\
 
-Write some simple unit and integration tests \( __smoke tests__ \)
+- Write some simple unit and integration tests (**smoke tests**)
 
-Write the  __code__
+- Write the **code**
 
-Write  __bug\-driven__  tests \(unit and integration\)
+- Write **bug-driven** tests (unit and integration)
 
-__Remember__ : a good test always needs to fail at first
+**Remember** : a good test always needs to fail at first
 
-![](img/TestingDebugging_12.png)
+---
 
-__Smoke tests__  \(where there's smoke there's fire\):
+# Test Driven Development (TDD)
 
-Specific type of  __unit test__
 
-Check that all  __basic __ operations work for normal input
+**Smoke tests** (where there's smoke there's fire):
 
-Does not need to handle  __edge cases __ or complex cases
+- Specific type of **unit test**.
+
+- Check that all **basic** operations work for normal input.
+
+- Does not need to handle **edge cases** or complex cases.
 
 Example:
 
-<span style="color:#741b47">public void</span>  __ testAddition\(\) \{__
+```java
+public void testAddition(){
+  int result = nw AddingMachine().add(2,3);
 
-__   __  <span style="color:#741b47">int </span> result  __= __  <span style="color:#741b47">new </span>  __AddingMachine\(\)\.add\(2\,3\);__
+  //old-school alternative to Assertions
+  assert result = 5;
+}
+```
 
-__   __  __// old\-school alternative to Assertions__
-
-__   __  <span style="color:#741b47">assert </span> result  __== 5; __
-
-__\}__
+---
 
 # Failure Testing
 
-Use tests to trigger unusual  __error __ states
+Use tests to trigger unusual **error** states.
 
-File system failures
+- File system failures
+- Networking failures
+- More generally, any failure from another component's API
 
-Networking failures
+![width:300px](img/TestingDebugging_13.jpg)
 
-More generally\, any failure from another component's API
+---
 
-![](img/TestingDebugging_13.jpg)
+# Failure Testing
 
-For simple cases\, use a  __mock__  object:
+For simple cases, use a **mock** object:
 
-Mockito\.thenThrow
+Mockito.thenThrow
 
-![](img/TestingDebugging_14.png)
+```java
+Database mockDatabase = Mockito.mock(Database.class);
+when(mockDatabase.sqlQuery(any(String.class)))
+  .thenThrow(new RuntimeException("Database error"))
+```
+
+
+---
+
+<style scoped>
+section {
+  font-size: 26px;
+ 
+}
+</style>
+
+# Failure Testing
 
 But what if you need something more fully featured than a mock?
 
-Add  __testing hooks__  in your code
+Add **testing hooks** in your code
 
-These are no\-op methods designed for tests to override them to inject functionality
+- These are no-op methods designed for tests to override them to inject functionality
 
-Combine these with a  __test __ implementation
+Combine these with a **test** implementation
 
-Fully functional \(unlike a mock\)
+- Fully functional (unlike a mock)
+- Allows for failure testing in **integration** tests.
 
-Allows for failure testing in  __integration__  tests
+![bg right width:150px](img/TestingDebugging_15.png)
 
-![](img/TestingDebugging_15.png)
+---
 
-<span style="color:#741b47">public class</span>   __ServerConnection \{__
+# Failure Testing
 
-__    __  <span style="color:#741b47">public </span>  __Connection getConnection\(\) \{__
+<style scoped>
+section {
+  font-size: 23px;
+ 
+}
+</style>
 
-__	testingHook\(\);__
+```java
+public class ServerConnection {
+  public Connection getConnection() {
+    testingHook();
+    return connection;
+  }
 
-__	__  <span style="color:#741b47">return </span>  __connection;__
+  protected void testingHook() {
+    //does nothing, only implemented by tests
+  }
+}
 
-__    \}__
+public class ServertestSuite {
+  private boolean hasFailed = false;
 
-__    __  <span style="color:#741b47">protected void</span>  __ testingHook\(\) \{__
+  private static class TestServerConnection extends ServerConnection {
+    protected void testingHook() {
+      if(!hasFailed) {
+        hasFailed = true;
+        throw new ServerConnectionExeption();
+      }
+  }
+}
+```
 
-<span style="color:#38761d">// does nothing\, only implemented by tests</span>
 
-__    \}__
-
-__\}__
-
-<span style="color:#741b47">public class</span>   __ServerTestSuite \{__
-
-__  __  <span style="color:#741b47">private boolean</span>  __ __  <span style="color:#0000ff">hasFailed </span>  __= __  <span style="color:#741b47">false</span>  __;__
-
-__  __  <span style="color:#741b47">private static class</span>  __ TestServerConnection __  <span style="color:#741b47">extends </span>  __ServerConnection \{__
-
-__     __  <span style="color:#741b47">protected void</span>  __ testingHook\(\) \{__
-
-__       __  <span style="color:#741b47">if </span>  __\(\!__  <span style="color:#0000ff">hasFailed</span>  __\) \{__
-
-__         __  <span style="color:#0000ff">hasFailed </span>  __= __  <span style="color:#741b47">true</span>  __;__
-
-__         __  <span style="color:#741b47">throw new</span>  __ ServerConnectionException\(\);__
-
-__       \}__
-
-__    \}__
-
-__\}__
+---
 
 # Bug-Driven Testing
 
 Use tests to reproduce a bug in a controlled environment
 
-![](img/TestingDebugging_16.png)
 
-![](img/TestingDebugging_17.png)
+![bg left width:300px](img/TestingDebugging_18.jpg)
+![bg right width:300px](img/TestingDebugging_16.png)
 
-![](img/TestingDebugging_18.jpg)
 
-Happens  __after__  implementing code
 
-Either actual reported bugs\, or suspected bugs:
+---
 
-Edge cases
+# Bug-Driven Testing
 
-Unusual code paths
+Happens **after** implementing code
 
-Combine with TDD smoke tests to get good  __testing coverage__
+Either actual reported bugs, or suspected bugs:
+
+- Edge cases
+- Unusual code paths
+
+Combine with TDD smoke tests to get good **testing coverage**
+
+---
 
 # Testing Coverage
 
-__Test Coverage __ is the percentage of branches and lines of code that are exercised by test code
+**Test Coverage** is the percentage of branches and lines of code that are exercised by test code
 
-Ideally\, all lines of code would be tested; in practice\, that's often excessive/not useful
+Ideally, all lines of code would be tested; in practice, that's often excessive/not useful
 
 Ex: an assert statement that never fails
 
-Aim for  __80\-90%__  code coverage
+Aim for  **80-90%**  code coverage
+
+----
 
 # Testing Coverage Tools
 
 
 
-* __Recommended: __ JaCoCo \( _[https://www\.eclemma\.org/jacoco/](https://www.eclemma.org/jacoco/)_ \)
-* Originated from the Emma project \( _[https://emma\.sourceforge\.net/](https://emma.sourceforge.net/)_ \)\, which is no longer well\-maintained
-* Includes IDE plugins for both IntelliJ and Eclipse
-  * _[https://plugins\.jetbrains\.com/plugin/103\-emma\-code\-coverage](https://plugins.jetbrains.com/plugin/103-emma-code-coverage)_
-  * _[https://www\.eclemma\.org/](https://www.eclemma.org/)_
+**Recommended:** JaCoCo \( _[https://www\.eclemma\.org/jacoco/](https://www.eclemma.org/jacoco/)_ \)
+- Originated from the Emma project \( _[https://emma\.sourceforge\.net/](https://emma.sourceforge.net/)_ \)\, which is no longer well\-maintained
+- Includes IDE plugins for both IntelliJ and Eclipse
+  - _[https://plugins\.jetbrains\.com/plugin/103\-emma\-code\-coverage](https://plugins.jetbrains.com/plugin/103-emma-code-coverage)_
+  - _[https://www\.eclemma\.org/](https://www.eclemma.org/)_
 
 
-![](img/TestingDebugging_19.png)
+---
 
 # Testing Coverage
 
